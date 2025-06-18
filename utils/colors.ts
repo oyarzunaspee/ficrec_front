@@ -1,0 +1,133 @@
+import { useAppStore } from "../store/hooks";
+
+const Colors = {
+    rose: {
+        text: "text-highlight-rose",
+        hover: "hover:text-highlight-rose",
+        label: "text-highlight-rose",
+        border: "border-highlight-rose",
+        bg: "bg-highlight-rose",
+        accent: "accent-color-highlight-rose",
+        caret: "caret-highlight-rose",
+        focus: "focus:ring-highlight-rose focus:ring-2",
+        pale: "bg-highlight-rose-pale"
+    },
+    pink: {
+        text: "text-highlight-pink",
+        hover: "hover:text-highlight-pink",
+        label: "text-highlight-pink",
+        border: "border-highlight-pink",
+        bg: "bg-highlight-pink",
+        accent: "accent-color-highlight-pink",
+        caret: "caret-highlight-pink",
+        focus: "focus:ring-highlight-pink focus:ring-2",
+        pale: "bg-highlight-pink-pale"
+    },
+    yellow: {
+        text: "text-highlight-yellow",
+        hover: "hover:text-highlight-yellow",
+        label: "text-highlight-yellow",
+        border: "border-highlight-yellow",
+        bg: "bg-highlight-yellow",
+        accent: "accent-color-highlight-yellow",
+        caret: "caret-highlight-yellow",
+        focus: "focus:ring-highlight-yellow focus:ring-2",
+        pale: "bg-highlight-yellow-pale"
+    },
+    orange: {
+        text: "text-highlight-orange",
+        hover: "hover:text-highlight-orange",
+        label: "text-highlight-orange",
+        border: "border-highlight-orange",
+        bg: "bg-highlight-orange",
+        accent: "accent-color-highlight-orange",
+        caret: "caret-highlight-orange",
+        focus: "focus:ring-highlight-orange focus:ring-2",
+        pale: "bg-highlight-orange-pale"
+    },
+    green: {
+        text: "text-highlight-green",
+        hover: "hover:text-highlight-green",
+        label: "text-highlight-green",
+        border: "border-highlight-green",
+        bg: "bg-highlight-green",
+        accent: "accent-color-highlight-green",
+        caret: "caret-highlight-green",
+        focus: "focus:ring-highlight-green focus:ring-2",
+        pale: "bg-highlight-green-pale"
+    },
+    indigo: {
+        text: "text-highlight-indigo",
+        hover: "hover:text-highlight-indigo",
+        label: "text-highlight-indigo",
+        border: "border-highlight-indigo",
+        bg: "bg-highlight-indigo",
+        accent: "accent-color-highlight-indigo",
+        caret: "caret-highlight-indigo",
+        focus: "focus:ring-highlight-indigo focus:ring-2",
+        pale: "bg-highlight-indigo-pale"
+    },
+    violet: {
+        text: "text-highlight-violet",
+        hover: "hover:text-highlight-violet",
+        label: "text-highlight-violet",
+        border: "border-highlight-violet",
+        bg: "bg-highlight-violet",
+        accent: "accent-color-highlight-violet",
+        caret: "caret-highlight-violet",
+        focus: "focus:ring-highlight-violet focus:ring-2",
+        pale: "bg-highlight-violet-pale"
+    },
+    slate: {
+        text: "text-highlight-slate",
+        hover: "hover:text-highlight-slate",
+        label: "text-highlight-slate",
+        border: "border-highlight-slate",
+        bg: "bg-highlight-slate",
+        accent: "accent-color-highlight-slate",
+        caret: "caret-highlight-slate",
+        focus: "focus:ring-highlight-slate focus:ring-2",
+        pale: "bg-highlight-slate-pale"
+    },
+    default: {
+        text: "text-grave",
+        hover: "hover:text-grave",
+        label: "text-secondary",
+        border: "border-grave",
+        bg: "bg-hover",
+        accent: "accent-color-grave",
+        caret: "caret-grave",
+        focus: "focus:ring-grave focus:ring-2",
+        pale: "bg-hover"
+    }
+}
+
+type ColorsTypes = {
+    text: string;
+    hover: string;
+    label: string;
+    border: string;
+    bg: string;
+    accent: string;
+    caret: string;
+    focus: string;
+    pale: string;
+}
+
+type ColorsValues = {
+    rose: ColorsTypes;
+    pink: ColorsTypes;
+    yellow: ColorsTypes;
+    orange: ColorsTypes;
+    green: ColorsTypes;
+    indigo: ColorsTypes;
+    violet: ColorsTypes;
+    slate: ColorsTypes;
+}
+
+const useColor = () => {
+    const highlight = useAppStore().getState().highlight.value
+    return Colors[highlight as keyof ColorsValues]
+}
+
+export default useColor;

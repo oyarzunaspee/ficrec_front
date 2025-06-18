@@ -1,0 +1,126 @@
+import CardHead from "../../../components/CardHead";
+import FormGroup from "../../../components/FormGroup";
+import CardFooter from "../../../components/CardFooter";
+import { useChangePasswordMutation, useVerifyPasswordMutation } from "../../../store/api/user";
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { dispatchResult } from "../../../utils/dispatchResult";
+
+
+type FormValues = {
+    password: string;
+}
+
+const Password = ({ open, setOpen }: { open: number, setOpen: Function }) => {
+
+    const [verified, setVerified] = useState(false);
+
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<FormValues>()
+
+    const [verifyPassword, result] = useVerifyPasswordMutation();
+    const submitVerify = handleSubmit((data: FormValues) => {
+        verifyPassword(data)
+            .unwrap()
+            .then(() => {
+                setVerified(true);
+            })
+    })
+
+    dispatchResult({
+        type: "Password",
+        action: "updated",
+        error: result.isError,
+        success: result.isSuccess
+    })
+
+    return (
+        <>
+            <section className="card lg:mb-10 mb-5">
+                <input
+                    type="checkbox"
+                    checked={open == 3 ? true : false}
+                    className="peer sr-only"
+                    readOnly
+                />
+                <CardHead
+                    onClick={() => {
+                        const item = open == 3 ? 0 : 3
+                        setOpen(item)
+                    }}
+                    title="Password"
+                    CornerIcon={open == 3 ? ChevronUpIcon : ChevronDownIcon}
+                />
+                <div className="card-body accordeon transition-height">
+                    <div className="content">
+                        <form onSubmit={submitVerify}>
+                            <div className="mb-5">
+                                <FormGroup
+                                    register={register("password", { required: true })}
+                                    errors={errors.password?.message}
+                                    isLoading={result.isLoading}
+                                    name="password" 
+                                    single 
+                                    label="Current password"
+                                    button="VERIFY"
+                                />
+                            </div>
+                        </form>
+                        <Verify verified={verified} setVerified={setVerified} />
+                    </div>
+                </div>
+            </section>
+        </>
+    )
+}
+
+type VerifyFormValues = {
+    password: string;
+    password_check: string;
+}
+
+const Verify = ({ verified, setVerified }: { verified: boolean, setVerified: Function }) => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm<VerifyFormValues>()
+
+    const [changePassword, result] = useChangePasswordMutation();
+    const submitPassword = handleSubmit((data: VerifyFormValues) => {
+        changePassword(data)
+            .unwrap()
+            .then(() => {
+                setVerified(false)
+            })
+    })
+
+    return (
+        <>
+            <form onSubmit={submitPassword}>
+                <FormGroup
+                    register={register("password", { required: true })}
+                    errors={errors.password?.message}
+                    name="password" type="password" label="New password"
+                    disabled={!verified}
+                />
+                <FormGroup
+                    register={register("password_check", { required: true })}
+                    errors={errors.password_check?.message}
+                    name="password" type="text" label="Confirm new password"
+                    disabled={!verified}
+                />
+                <CardFooter
+                    isLoading={result.isLoading}
+                    disabled={!verified}
+                />
+            </form>
+        </>
+    )
+}
+
+export default Password;
