@@ -99,6 +99,7 @@ export type Saved = {
 
 export type FindQuery = {
     name: string;
+    about: string;
     uid: string;
     maker: string;
     matching_recs: number;

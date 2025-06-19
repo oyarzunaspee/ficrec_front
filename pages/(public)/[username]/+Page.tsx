@@ -13,7 +13,7 @@ const Profile = () => {
                 <div className="mt-[15dvh] w-full">
                     <Bio
                         avatar={user.avatar}
-                        highlight={user.highlight}
+                        userHighlight={user.highlight}
                         username={user.username}
                         bio={user.bio}
                     />

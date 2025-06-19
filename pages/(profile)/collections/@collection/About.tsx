@@ -3,7 +3,7 @@ import { usePageContext } from "vike-react/usePageContext";
 import { useState, useEffect } from "react";
 import { EllipsisVerticalIcon, XCircleIcon, LockOpenIcon, LockClosedIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
 import { ClipboardDocumentIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { useAppDispatch } from "../../../../store/hooks";
 import { useMediaQuery } from "../../../../store/hooks";
 import { navigate } from "vike/client/router";
 import Dropdown from "../../../../components/Dropdown";
@@ -14,6 +14,7 @@ import { initDisplay } from "../../../../store/slices/collectionDisplay";
 import Popup from "../../../../components/Popup";
 import { dispatchResult } from "../../../../utils/dispatchResult";
 import useColor from "../../../../utils/colors";
+import Loading from "../../../../components/Loading";
 
 
 const About = () => {
@@ -37,6 +38,13 @@ const About = () => {
     const [dropdown, setDropdown] = useState(false);
 
     if (!data) return null;
+
+    if (isLoading) {
+        return (
+            <Loading />
+        )
+    }
+
 
     return (
         <>

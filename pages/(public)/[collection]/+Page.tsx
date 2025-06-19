@@ -13,14 +13,16 @@ import { useAppDispatch, useAppSelector, useMediaQuery } from "../../../store/ho
 import { active } from "../../../store/slices/activeUser";
 import ResultMessage from "../../../layouts/components/ResultMessage";
 import { navigate } from "vike/client/router";
+import useColor from "../../../utils/colors";
 
 const Profile = () => {
     const dispatch = useAppDispatch()
     const activeUser = useAppSelector((state) => state.activeUser.value)
-
+    
     const isLG = useMediaQuery()
-
+    
     const collection = useData<Data>();
+    const highlight = useColor(collection?.reader.highlight)
 
     const { data, isError, isSuccess, isLoading } = useGetBookmarksQuery()
 
@@ -60,7 +62,7 @@ const Profile = () => {
                                     onClick={() => navigate(`/@${collection.reader.username}`)}
                                     className=" h-[15dvh] aspect-square left-0 rounded-full shadow cursor-pointer object-cover" />
                                 <h2 className={`font-bold text-lg mt-5 break-all text-center
-                                    text-${collection.reader.highlight}    
+                                    ${highlight.text}   
                                     `}>
                                     @{collection.reader.username}
                                 </h2>
@@ -81,7 +83,7 @@ const Profile = () => {
                 }
 
                 {!isLG &&
-                    <ScrollBio scroll={scroll} highlight={`text-${collection.reader.highlight}`} name={collection.name} />
+                    <ScrollBio scroll={scroll} highlight={highlight.text} name={collection.name} />
                 }
                 <div className="lg:basis-1/3 md:basis-1/2">
 
@@ -89,7 +91,7 @@ const Profile = () => {
                         <ResultMessage />
                     }
                     <div className="fixed bottom-20 right-5 lg:right-10 z-40">
-                        <ScrollButton highlight={`bg-${collection.reader.highlight}`} />
+                        <ScrollButton highlight={highlight.bg} />
                     </div>
 
                     <div className="min-h-screen bg-base flex flex-col items-center px-5">
@@ -110,7 +112,7 @@ const Profile = () => {
                                 <Bio
                                     avatar={collection.reader.avatar}
                                     username={collection.reader.username}
-                                    highlight={collection.reader.highlight}
+                                    userHighlight={collection.reader.highlight}
                                     bio={collection.reader.bio}
                                 />
                             </div>
@@ -131,7 +133,7 @@ const Profile = () => {
     )
 }
 
-const ScrollBio = ({ scroll, name, highlight }: { scroll: boolean, name: string, highlight?: string }) => {
+const ScrollBio = ({ scroll, name, highlight }: { scroll: boolean, name: string, highlight: string }) => {
     return (
 
         <div className={`fixed z-40 w-full
@@ -241,7 +243,7 @@ const Recs = ({ userData, collection }: { userData?: { bookmarks: string[] }, co
                             <IndividualRec
                                 key={rec.uid}
                                 rec={rec}
-                                highlight={collection.reader.highlight}
+                                userHighlight={collection.reader.highlight}
                                 show={show}
                                 username={collection.reader.username}
                                 collection={collection.uid}

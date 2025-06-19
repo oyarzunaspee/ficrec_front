@@ -13,7 +13,9 @@ const highlightSlice = createSlice({
   initialState,
   reducers: {
     updateHighlight(state, action: PayloadAction<string>) {
-      state.value = action.payload
+      if (action.payload != "") {
+        state.value = action.payload
+      }
     }
   }
 })

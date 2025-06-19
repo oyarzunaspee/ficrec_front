@@ -1,7 +1,9 @@
-import { HomeIcon, BookmarkIcon, MagnifyingGlassCircleIcon, SunIcon, MoonIcon } from "@heroicons/react/24/solid";
+import { HomeIcon, BookmarkIcon, MagnifyingGlassCircleIcon, ArrowUpOnSquareIcon } from "@heroicons/react/24/solid";
 import { usePageContext } from "vike-react/usePageContext";
 import { useAppSelector } from "../../store/hooks";
 import useColor from "../../utils/colors";
+import { useLogOutMutation } from "../../store/api/auth";
+import { navigate } from "vike/client/router";
 
 const Nav = () => {
   const navOpen = useAppSelector((state) => state.nav.value)
@@ -9,14 +11,27 @@ const Nav = () => {
   const highlight = useColor()
   const context = usePageContext()
 
+  const [useLogOut, result] = useLogOutMutation()
+
+  const performLogOut = () => {
+    useLogOut()
+    .unwrap()
+  }
+
+  if (result.isSuccess) {
+    navigate("/login")
+  }
+
   return (
     <>
       <div className={`overflow-hidden transition-height duration-300 ease-in-out
     ${navOpen ? "max-h-50" : "max-h-0"}
     `}>
         <div className="px-5 pb-1 pt-5 flex justify-around items-center">
-          <div className="cursor-pointer px-2">
-            <SunIcon className="size-8 lg:size-7 text-dull" />
+          <div 
+          onClick={performLogOut}
+          className="cursor-pointer px-2">
+            <ArrowUpOnSquareIcon className="size-8 rotate-270 lg:size-7 text-dull" />
           </div>
           <a href="/find" className="cursor-pointer px-2">
             <MagnifyingGlassCircleIcon

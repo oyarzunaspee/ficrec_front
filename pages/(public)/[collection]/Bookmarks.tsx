@@ -6,17 +6,19 @@ import { Bookmark } from "../../../utils/types";
 import { useMediaQuery } from "../../../store/hooks";
 import { close } from "../../../store/slices/popup";
 import { dispatchResult } from "../../../utils/dispatchResult";
+import useColor from "../../../utils/colors";
 
 type BookmarksProps = {
     username: string;
     collection: string;
     rec: string;
-    highlight?: string;
+    userHighlight: string;
     userBookmarks?: Bookmark;
 }
 
-const Bookmarks = ({ username, collection, rec, highlight, userBookmarks }: BookmarksProps) => {
+const Bookmarks = ({ username, collection, rec, userHighlight, userBookmarks }: BookmarksProps) => {
     const dispatch = useAppDispatch()
+    const highlight = useColor(userHighlight)
     const activeUser = useAppSelector((state) => state.activeUser.value)
 
     const isLG = useMediaQuery()
@@ -60,7 +62,7 @@ const Bookmarks = ({ username, collection, rec, highlight, userBookmarks }: Book
                             className={`size-5
                         ${isLG ? "cursor-pointer" : ""}
                         ${(userBookmarks && userBookmarks.bookmarks.includes(rec)) ?
-                                    "text-" + highlight
+                                    highlight.text
                                     :
                                     "text-base"
                                 }    

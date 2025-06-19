@@ -7,6 +7,7 @@ import { useOutsideClick } from "../../../utils/outsideClick";
 import Bookmarks from "./Bookmarks";
 import { Bookmark } from "../../../utils/types";
 import { formatWords } from "../../../utils/formatWords";
+import useColor from "../../../utils/colors";
 
 
 type ShowProp = {
@@ -19,14 +20,15 @@ type ShowProp = {
 
 type RecProps = {
     rec: Rec;
-    highlight?: string;
+    userHighlight: string;
     show: ShowProp;
     collection: string;
     username: string;
     userBookmarks?: Bookmark;
 }
 
-const IndividualRec = ({ rec, highlight, show, collection, username, userBookmarks }: RecProps) => {
+const IndividualRec = ({ rec, userHighlight, show, collection, username, userBookmarks }: RecProps) => {
+    const highlight = useColor(userHighlight)
     const optionals = Object.values(show).filter((v) => v).length
 
     const [open, setOpen] = useState<string | null>(null)
@@ -42,7 +44,7 @@ const IndividualRec = ({ rec, highlight, show, collection, username, userBookmar
         <>
             <div key={rec.uid} className="card pb-7 pt-3 mb-5 relative">
                 <Bookmarks
-                    highlight={highlight}
+                    userHighlight={userHighlight}
                     username={username}
                     collection={collection}
                     rec={rec.uid}
@@ -65,7 +67,7 @@ const IndividualRec = ({ rec, highlight, show, collection, username, userBookmar
                                 {rec.author.map((item) => {
                                     return (
                                         <span key={item} className={`ml-1 font-normal text-sm not-last:after:content-[',']
-                                        ${highlight ? `text-${highlight}` : ""}
+                                        ${userHighlight == "default" ? "text-dull" : highlight.text}
                                         `}>
                                             {item}
                                         </span>
@@ -101,7 +103,7 @@ const IndividualRec = ({ rec, highlight, show, collection, username, userBookmar
                                                     onClick={() => handleOpen(tag)}
                                                     open={open}
                                                     setOpen={setOpen}
-                                                    highlight={highlight}
+                                                    userHighlight={userHighlight}
                                                 />
                                             }
                                         </>
@@ -180,10 +182,11 @@ type OptionalProps = {
     onClick: MouseEventHandler<HTMLLIElement>;
     open: string | null;
     setOpen: Function;
-    highlight?: string;
+    userHighlight: string;
 }
 
-const Optional = ({ name, onClick, open, setOpen, highlight }: OptionalProps) => {
+const Optional = ({ name, onClick, open, setOpen, userHighlight }: OptionalProps) => {
+    const highlight = useColor(userHighlight)
     const ref = useOutsideClick(() => {
         setOpen(null)
     });
@@ -198,8 +201,8 @@ const Optional = ({ name, onClick, open, setOpen, highlight }: OptionalProps) =>
                 <span
                     ref={ref}
                     className={`border-b-2 border-dotted pb-0.5
-                hover:border-${highlight}
-                ${open == name ? `border-${highlight} text-${highlight}` : "border-dull"}
+                ${highlight.hoverBorder}
+                ${open == name ? `${highlight.border} ${highlight.text}` : "border-dull"}
                 `}>
                     {name}
                 </span>

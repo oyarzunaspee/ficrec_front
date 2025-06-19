@@ -1,14 +1,15 @@
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import useColor from "../../../utils/colors";
-import { useAppDispatch } from "../../../store/hooks";
-import { updateQuery } from "../../../store/slices/query";
-// import { useLazyGetFindRecsQuery } from "../../../store/api/profile";
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
 import { useGetFindRecsInfiniteQuery } from "../../../store/api/public";
-import type { UserCollection } from "../../../utils/types";
+import type { FindQuery } from "../../../utils/types";
+import { ChevronDoubleRightIcon } from "@heroicons/react/24/solid";
+import Loading from "../../../components/Loading";
 
 const Page = () => {
-    const dispatch = useAppDispatch()
+    const userHighlight = useAppSelector((state) => state.highlight.value)
     const highlight = useColor()
+
     const [skip, setSkip] = useState<boolean>(true)
     const [activeSearch, setActiveSearch] = useState<string>("")
     const [searchQuery, setSearchQuery] = useState<string>("")
@@ -23,7 +24,7 @@ const Page = () => {
     const useQueryResult = useGetFindRecsInfiniteQuery({ type: activeSearch, query: searchQuery, tags: tagsSearch }, { skip: skip })
     const { data, isFetching, fetchNextPage, refetch } = useQueryResult
 
-    useMemo(() => {
+    useEffect(() => {
         if (data) {
             const lastPageParam = data.pageParams.at(-1);
             if (lastPageParam !== undefined) {
@@ -32,13 +33,13 @@ const Page = () => {
             if (data.pages.length > 0) {
                 setTotal(data.pages[0].pages);
             }
-
+            setSkip(true)
         }
     }, [data])
 
 
     const handleScroll = () => {
-
+        console.log("!!")
         if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight && !isFetching) {
             if (currentPage < total) {
                 fetchNextPage();
@@ -55,45 +56,16 @@ const Page = () => {
         };
     }, [data]);
 
-    // useEffect(() => {
-    //     if (searchQuery.length > 2 && activeSearch != "") {
-    //         refetch()
-    //     }
-    // }, [searchQuery, activeSearch])
-
-    // const [trigger, result, lastPromiseInfo] = useLazyGetFindRecsQuery()
-
-
-    // const performSearch = () => {
-    //     if (activeSearch != "" && searchQuery.length > 2) {
-    //         trigger({ data: {query: searchQuery.split(",")}, page: currentPage, type: activeSearch })
-    //     }
-    // }
-
-    // const nextPage = () => {
-    //     if (activeSearch != "" && searchQuery.length > 2) {
-    //         trigger({ data: {query: searchQuery.split(",")}, page: currentPage, type: activeSearch })
-    //     }
-    // }
-
-    // useEffect(() => {
-    //     setCurrentPage(1)
-    // }, [activeSearch])
-
-    // useEffect(() => {
-    //     setCurrentPage(1)
-    // }, [searchQuery])
-
-    // useEffect(() => {
-    //     if (activeSearch != "" && searchQuery.length > 2) {
-    //         setDisabled(false)
-    //     } else if (activeSearch == "" || searchQuery.length < 1) {
-    //         setDisabled(true)
-    //     }
-    // }, [activeSearch, searchQuery])
+    useEffect(() => {
+        if (activeSearch != "" && searchQuery.length > 2) {
+            setDisabled(false)
+        } else if (activeSearch == "" || searchQuery.length < 3) {
+            setDisabled(true)
+        }
+    }, [activeSearch, searchQuery])
 
     const performSearch = () => {
-        // setSkip(false)
+        setSkip(false)
     }
 
     return (
@@ -111,53 +83,57 @@ const Page = () => {
                         "+ Add tags"
                     }
                 </div>
-                <div className={`transition-height duration-300 ease-in-out overflow-hidden
-                ${openTags ? "max-h-100" : "max-h-0"}
+                <div className={`transition-height duration-300 ease-in-out
+                ${openTags ? "max-h-100" : "max-h-0 overflow-hidden"}
                 `}>
                     <div className="form-group">
                         <span className={`text-xs mb-1
-                            ${activeSearch == "link" ? "text-base" : "text-primary" }
+                            ${activeSearch == "link" ? "text-base" : "text-primary"}
                         `}>
                             Separate tags by comma
                         </span>
                         <input
                             value={tagsSearch}
-                            onChange={(e) => setTagsSearch(e.target.value)}
+                            onChange={(e) => setTagsSearch(e.target.value.replace(", ", ","))}
                             disabled={activeSearch == "link"}
                             type="search" name="" id=""
+                            className={`${highlight.focus} ${highlight.caret}`}
                         />
                     </div>
 
                 </div>
                 <div className="form-group">
-                    
-                        <span className="text-xs text-primary mb-1 block">
-                            {(activeSearch && activeSearch != "link") &&
+
+                    <span className="text-xs text-primary mb-1 block">
+                        {(activeSearch && activeSearch != "link") &&
                             <>
-                            Separate
-                            {activeSearch == "ship" &&
-                            " characters "
-                            }
-                            {activeSearch == "fandom" &&
-                            " fandoms "
-                            }
-                            {activeSearch == "author" &&
-                            " authors "
-                            }
-                            by comma
+                                Separate
+                                {activeSearch == "ship" &&
+                                    " characters "
+                                }
+                                {activeSearch == "fandom" &&
+                                    " fandoms "
+                                }
+                                {activeSearch == "author" &&
+                                    " authors "
+                                }
+                                by comma
                             </>
                         }
-                        </span>
+                    </span>
                     <div className="single">
                         <input
                             type="search"
                             value={searchQuery}
-                            onChange={(e) => setSearchQuery(e.target.value)}
+                            className={`${highlight.focus} ${highlight.caret}`}
+                            onChange={(e) => setSearchQuery(e.target.value.replace(", ", ","))}
                         />
                         <button
-                            // disabled={disabled}
+                            disabled={disabled}
                             onClick={performSearch}
-                            className="bg-primary disabled:bg-base disabled:cursor-default">
+                            className={`disabled:bg-base disabled:cursor-default
+                            ${userHighlight == "default" ? "bg-secondary" : highlight.bg}
+                            `}>
                             SEARCH
                         </button>
                     </div>
@@ -179,17 +155,28 @@ const Page = () => {
 
             {data ?
                 <>
-                    {data.results.map((item: UserCollection) => {
-                        return (
-                            <div className="card">
-                                {item.name}
-                            </div>
-                        )
-                    })}
+                    {data.pages.map((result) => {
+                        return result.results.map((item: FindQuery) => {
+                            return (
+                                <FoundCollection
+                                    name={item.name}
+                                    about={item.about}
+                                    uid={item.uid}
+                                    maker={item.maker}
+                                    matching_recs={item.matching_recs}
+                                />
+                            )
+                        })
+                    })
+                    }
+                    {isFetching ?
+                        <Loading />
+                    :
+                        null
+                    }
                 </>
                 :
-                null
-            }
+                null}
         </>
     )
 }
@@ -209,6 +196,53 @@ const RadioOptions = ({ name, activeSearch, setActiveSearch }: { name: string, a
             <label htmlFor="" className="ml-2 text-sm text-secondary">
                 {name}
             </label>
+        </div>
+    )
+}
+
+const FoundCollection = ({ name, about, uid, maker, matching_recs }: FindQuery) => {
+    const highlight = useColor()
+    return (
+        <div className="mt-10">
+            <div className="card">
+                <div className="border-b border-dashed border-base">
+                    <a
+                        href={`/@${maker}/${uid}`}
+                        title="Go to collection"
+                        className={`px-5 pt-5 pb-2 flex justify-between
+                        ${highlight.hover} text-primary
+                        `}
+                        >
+                        <span>
+                            {matching_recs} recs
+                        </span>
+                        <div className="pl-5 shrink-0">
+                            <ChevronDoubleRightIcon className="size-5" />
+                        </div>
+                    </a>
+
+                </div>
+                <div className="p-5">
+                    <div className="flex">
+                        <h2 className="text-grave">
+                            <span className={`shrink-0 font-bold ${highlight.text}`}>
+                                {maker}
+                            </span>
+                            <span className="text-primary mx-1 font-bold">
+                                |
+                            </span>
+                            {name}
+                        </h2>
+                    </div>
+                    {about &&
+                    <div className="mt-2">
+                        <p className="text-primary text-sm">
+                        {about}
+                        </p>
+                    </div>
+                    }
+                </div>
+            </div>
         </div>
     )
 }

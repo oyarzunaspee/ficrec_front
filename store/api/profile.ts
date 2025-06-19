@@ -116,7 +116,7 @@ export const profileApi = createApi({
         method: "PATCH",
         body: data
       }),
-      invalidatesTags: ["recs"]
+      invalidatesTags: ["recs", "collection"]
     }),
     getRecs: builder.infiniteQuery<RecInfiniteQueryOutput, { uid: string, query: string }, number>({
       infiniteQueryOptions: {

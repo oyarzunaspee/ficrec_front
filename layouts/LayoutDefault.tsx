@@ -73,7 +73,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
           <div className="lg:basis-3/4 xl:basis-2/4">
             <div className="lg:flex lg:justify-center">
               <div className="lg:basis-2/3">
-                <div className="p-5">
+                <div className="p-5 lg:mt-5">
                   {!isLG && context.urlParsed.pathname == "/" &&
                     <>
                       <CollectionListMobile collections={data.collections} />

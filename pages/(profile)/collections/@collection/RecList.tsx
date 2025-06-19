@@ -1,20 +1,16 @@
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { useGetRecsInfiniteQuery } from "../../../../store/api/profile";
-import { useState, useEffect, useRef, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { useMediaQuery } from "../../../../store/hooks";
 import { usePageContext } from "vike-react/usePageContext";
 import Rec from "./Rec";
 import { updateQuery } from "../../../../store/slices/query";
-import useColor from "../../../../utils/colors";
+import Loading from "../../../../components/Loading";
 
 const RecList = () => {
     const dispatch = useAppDispatch()
     const context = usePageContext();
-    const highlight = useColor()
     const query = useAppSelector((state) => state.query.value);
-
-    const isLG = useMediaQuery();
 
     const [total, setTotal] = useState<number>(0);
     const [currentPage, setCurrentPage] = useState(0);
@@ -93,10 +89,10 @@ const RecList = () => {
                         )
                     })
                 })}
-                {isFetching &&
-                    <div className="flex justify-center py-5">
-                        <ArrowPathIcon className="size-8 animate-spin text-gray-100" />
-                    </div>
+                {isFetching ?
+                    <Loading />
+                    :
+                    null
                 }
             </>
         )

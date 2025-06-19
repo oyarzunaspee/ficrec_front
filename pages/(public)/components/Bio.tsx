@@ -1,6 +1,8 @@
 import { navigate } from "vike/client/router";
+import useColor from "../../../utils/colors";
 
-const Bio = ({ avatar, highlight, username, bio }: { avatar?: string, highlight?: string, username: string, bio?: string }) => {
+const Bio = ({ avatar, userHighlight, username, bio }: { avatar?: string, userHighlight?: string, username: string, bio?: string }) => {
+    const highlight = useColor(userHighlight)
 
     const highlightValue = `text-${highlight ? highlight : "grave"}`
 
@@ -14,7 +16,7 @@ const Bio = ({ avatar, highlight, username, bio }: { avatar?: string, highlight?
                 <div className="card p-5 break-all rounded-full">
                     <div className="ml-[12dvh] pr-5">
                         <h2 className={`font-bold text-lg
-                                    ${highlightValue}    
+                                    ${userHighlight == "default" ? "text-grave" : highlight.text}  
                                     `}>
                             @{username}
                         </h2>

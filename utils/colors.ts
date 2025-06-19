@@ -4,6 +4,7 @@ const Colors = {
     rose: {
         text: "text-highlight-rose",
         hover: "hover:text-highlight-rose",
+        hoverBorder: "hover:border-highlight-rose",
         label: "text-highlight-rose",
         border: "border-highlight-rose",
         bg: "bg-highlight-rose",
@@ -15,6 +16,7 @@ const Colors = {
     pink: {
         text: "text-highlight-pink",
         hover: "hover:text-highlight-pink",
+        hoverBorder: "hover:border-highlight-pink",
         label: "text-highlight-pink",
         border: "border-highlight-pink",
         bg: "bg-highlight-pink",
@@ -26,6 +28,7 @@ const Colors = {
     yellow: {
         text: "text-highlight-yellow",
         hover: "hover:text-highlight-yellow",
+        hoverBorder: "hover:border-highlight-yellow",
         label: "text-highlight-yellow",
         border: "border-highlight-yellow",
         bg: "bg-highlight-yellow",
@@ -37,6 +40,7 @@ const Colors = {
     orange: {
         text: "text-highlight-orange",
         hover: "hover:text-highlight-orange",
+        hoverBorder: "hover:border-highlight-orange",
         label: "text-highlight-orange",
         border: "border-highlight-orange",
         bg: "bg-highlight-orange",
@@ -48,6 +52,7 @@ const Colors = {
     green: {
         text: "text-highlight-green",
         hover: "hover:text-highlight-green",
+        hoverBorder: "hover:border-highlight-green",
         label: "text-highlight-green",
         border: "border-highlight-green",
         bg: "bg-highlight-green",
@@ -59,6 +64,7 @@ const Colors = {
     indigo: {
         text: "text-highlight-indigo",
         hover: "hover:text-highlight-indigo",
+        hoverBorder: "hover:border-highlight-indigo",
         label: "text-highlight-indigo",
         border: "border-highlight-indigo",
         bg: "bg-highlight-indigo",
@@ -70,6 +76,7 @@ const Colors = {
     violet: {
         text: "text-highlight-violet",
         hover: "hover:text-highlight-violet",
+        hoverBorder: "hover:border-highlight-violet",
         label: "text-highlight-violet",
         border: "border-highlight-violet",
         bg: "bg-highlight-violet",
@@ -81,6 +88,7 @@ const Colors = {
     slate: {
         text: "text-highlight-slate",
         hover: "hover:text-highlight-slate",
+        hoverBorder: "hover:border-highlight-slate",
         label: "text-highlight-slate",
         border: "border-highlight-slate",
         bg: "bg-highlight-slate",
@@ -92,6 +100,7 @@ const Colors = {
     default: {
         text: "text-grave",
         hover: "hover:text-grave",
+        hoverBorder: "hover:border-grave",
         label: "text-secondary",
         border: "border-grave",
         bg: "bg-hover",
@@ -105,6 +114,7 @@ const Colors = {
 type ColorsTypes = {
     text: string;
     hover: string;
+    hoverBorder: string;
     label: string;
     border: string;
     bg: string;
@@ -125,9 +135,13 @@ type ColorsValues = {
     slate: ColorsTypes;
 }
 
-const useColor = () => {
-    const highlight = useAppStore().getState().highlight.value
-    return Colors[highlight as keyof ColorsValues]
+const useColor = (userHighlight?: string) => {
+    if (userHighlight) {
+        return Colors[userHighlight as keyof ColorsValues]
+    } else {
+        const highlight = useAppStore().getState().highlight.value
+        return Colors[highlight as keyof ColorsValues]
+    }
 }
 
 export default useColor;

@@ -6,11 +6,12 @@ import type { Saved } from "../../../utils/types";
 import useColor from "../../../utils/colors";
 import IndividualSaved from "./Saved";
 import { activeTab } from "../../../store/slices/savedTab";
+import Loading from "../../../components/Loading";
 
 const Bookmarks = () => {
     const dispatch = useAppDispatch()
     const query = useAppSelector((state) => state.query.value);
-    
+
     const savedTab = useAppSelector((state) => state.savedTab.value)
 
     const isLG = useMediaQuery()
@@ -92,6 +93,11 @@ const Bookmarks = () => {
                     )
                 })
             })}
+            {isFetching ?
+                <Loading />
+                :
+                null
+            }
         </>
     )
 }
