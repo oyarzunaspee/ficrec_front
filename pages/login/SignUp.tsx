@@ -1,14 +1,15 @@
 import { useForm, Resolver } from "react-hook-form";
+import { navigate } from "vike/client/router";
 
 import CardFooter from "../../components/CardFooter";
 import CardHead from "../../components/CardHead";
 import FormGroup from "../../components/FormGroup";
 
-import type { SignUpInput } from "../../utils/types";
 
 import { useSignUpMutation } from "../../store/api/auth";
 
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import { useEffect } from "react";
 
 type FormValues = {
     username: string;
@@ -41,7 +42,6 @@ const SignUp = () => {
     const [useSignup, result] = useSignUpMutation()
     
     const performSignup = handleSubmit((data: FormValues) => {
-        console.log(data)
     
         useSignup(data)
             .unwrap()
@@ -56,6 +56,12 @@ const SignUp = () => {
                 console.log(e)
             })
         })
+
+        useEffect(() => {
+            if (result.isSuccess) {
+                navigate("/")
+            }
+        }, [result.isSuccess])
 
         return (
             <>
