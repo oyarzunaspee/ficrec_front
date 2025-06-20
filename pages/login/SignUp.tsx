@@ -13,7 +13,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/solid";
 type FormValues = {
     username: string;
     password: string;
-    passwordCheck: string;
+    password_check: string;
 }
 
 const resolver: Resolver<FormValues> = async (values) => {
@@ -41,15 +41,15 @@ const SignUp = () => {
     const [useSignup, result] = useSignUpMutation()
     
     const performSignup = handleSubmit((data: FormValues) => {
-        const body: SignUpInput = {username: data.username, password: data.password, password_check: data.passwordCheck}
+        console.log(data)
     
-        useSignup(body)
+        useSignup(data)
             .unwrap()
             .then(() => {
                 reset({
                     username: "",
                     password: "",
-                    passwordCheck: ""
+                    password_check: ""
                 })
             })
             .catch((e) => {
@@ -89,11 +89,11 @@ const SignUp = () => {
                                 })}
                             />
                             <FormGroup
-                                name="confirmPassword"
+                                name="password_check"
                                 label="Confirm Password"
-                                errors={errors.passwordCheck?.message}
+                                errors={errors.password_check?.message}
                                 type="password"
-                                register={register("passwordCheck", { required: true, minLength: 6 })}
+                                register={register("password_check", { required: true })}
                             />
                         </div>
                         <div className="card-footer pb-5">
