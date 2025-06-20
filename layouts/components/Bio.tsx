@@ -1,6 +1,6 @@
 import { usePageContext } from "vike-react/usePageContext";
 
-import defaultAvatar from "assets/defaultAvatar.png"
+import defaultAvatar from "../../assets/defaultAvatar.png";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useMediaQuery } from "../../utils/mediaQuery";
