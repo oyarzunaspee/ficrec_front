@@ -3,7 +3,7 @@ import { SignUpInput, LogInInput, Token } from "../../utils/types";
 
 export const authApi = createApi({
   reducerPath: "authApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "/api/auth/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://almondluu.pythonanywhere.com/v1/" }),
   endpoints: (builder) => ({
     signUp: builder.mutation<void, SignUpInput>({
       query: (body) => ({

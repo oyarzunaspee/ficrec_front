@@ -5,7 +5,7 @@ import { refreshToken } from "../slices/token";
 
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "/api/",
+  baseUrl: "https://almondluu.pythonanywhere.com/v1/",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).token.value;

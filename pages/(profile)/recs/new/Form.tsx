@@ -63,13 +63,11 @@ const Form = () => {
     const [useAddRec, result] = useAddRecMutation();
     const performAddRec = async (data: FormValues) => {
         setCollection(data.collection)
-        useAddRec({
+        await useAddRec({
             uid: data.collection,
             data: data
         })
             .unwrap()
-            .then(() => {
-            })
     }
     
 
