@@ -4,7 +4,7 @@ import { SignUpInput, LogInInput, Token } from "../../utils/types";
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://almondluu.pythonanywhere.com/v1/",
+    baseUrl: "https://almondluu.pythonanywhere.com/v1/auth/",
     credentials: "include",
   }),
   endpoints: (builder) => ({
