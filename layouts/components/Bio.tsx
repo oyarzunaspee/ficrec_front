@@ -58,7 +58,7 @@ const Bio = ({ username, bio, avatar }: BioProps) => {
                     className="
                       flex justify-center items-center
                       lg:w-23 lg:mr-2
-                      aspect-square bg-gray-200 inline-block w-0 peer-checked:w-23 peer-checked:mr-2 rounded-lg transition-height duration-500 ease-in-out"
+                       inline-block w-0 peer-checked:w-23 peer-checked:mr-2 rounded-lg transition-height duration-500 ease-in-out"
                     >
                         {urlParsed.pathname != "/configuration" &&
                         <a 
@@ -68,7 +68,8 @@ const Bio = ({ username, bio, avatar }: BioProps) => {
                         </a>
                         }
                             <img 
-                            className={urlParsed.pathname != "/configuration" ? (showConfig ? "brightness-70" : "brightness-100") : "brightness-100"}
+                            className={`aspect-square
+                            ${urlParsed.pathname != "/configuration" ? (showConfig ? "brightness-70" : "brightness-100") : "brightness-100"}`}
                             src={avatar ? avatar : defaultAvatar} alt="" />
                     </div>
                     <div className="inline-block align-top">
