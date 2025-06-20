@@ -5,7 +5,7 @@ export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
     baseUrl: "https://almondluu.pythonanywhere.com/v1/",
-    credentials: "include",
+    credentials: "same-origin",
   }),
   endpoints: (builder) => ({
     signUp: builder.mutation<void, SignUpInput>({
