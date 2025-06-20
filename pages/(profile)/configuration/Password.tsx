@@ -33,13 +33,6 @@ const Password = ({ open, setOpen }: { open: number, setOpen: Function }) => {
             })
     })
 
-    dispatchResult({
-        type: "Password",
-        action: "updated",
-        error: result.isError,
-        success: result.isSuccess
-    })
-
     return (
         <>
             <section className="card lg:mb-10 mb-5">
@@ -65,8 +58,8 @@ const Password = ({ open, setOpen }: { open: number, setOpen: Function }) => {
                                     register={register("password", { required: true })}
                                     errors={errors.password?.message}
                                     isLoading={result.isLoading}
-                                    name="password" 
-                                    single 
+                                    name="password"
+                                    single
                                     label="Current password"
                                     button="VERIFY"
                                 />
@@ -99,6 +92,13 @@ const Verify = ({ verified, setVerified }: { verified: boolean, setVerified: Fun
             .then(() => {
                 setVerified(false)
             })
+    })
+
+    dispatchResult({
+        type: "Password",
+        action: "changed",
+        error: result.isError,
+        success: result.isSuccess
     })
 
     return (

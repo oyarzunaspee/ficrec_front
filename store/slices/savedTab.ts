@@ -11,7 +11,7 @@ export const savedTabSlice = createSlice({
   name: "savedTab",
   initialState,
   reducers: {
-    activeTab: (state, action: PayloadAction<boolean>) => {
+    activeTab: (state, action: PayloadAction<boolean | null>) => {
         state.value = action.payload
     }
   }

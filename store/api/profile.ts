@@ -14,7 +14,7 @@ type SavedResultOutput = {
   current: number;
   next: number | undefined;
   pages: number;
-  result: Saved[];
+  results: Saved[];
 }
 
 type SavedInput = {

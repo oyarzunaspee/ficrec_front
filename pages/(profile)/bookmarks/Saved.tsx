@@ -7,9 +7,9 @@ import Dropdown from "../../../components/Dropdown";
 import type { Saved } from "../../../utils/types";
 
 import { useDeleteSavedMutation, useMarkAsReadMutation } from "../../../store/api/profile";
+import { dispatchResult } from "../../../utils/dispatchResult";
 import { useOutsideClick } from "../../../utils/outsideClick";
 import { formatWords } from "../../../utils/formatWords";
-import { dispatchResult } from "../../../utils/dispatchResult";
 import { useMediaQuery } from "../../../utils/mediaQuery";
 import useColor from "../../../utils/colors";
 
@@ -197,6 +197,13 @@ const Menu = ({ setDeleteBookmark, dropdown, setDropdown, uid, read }: MenuProps
             }
         }
     ]
+
+    dispatchResult({
+            type: "Bookmark",
+            action: "marked as read",
+            error: result.isError,
+            success: result.isSuccess
+        })
 
     const handleClickOutside = () => {
         setDropdown(false);

@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
-const options = ["created", "edited", "deleted", "updated", "deactivated", "copied"]
+const options = ["created", "edited", "deleted", "updated", "changed", "deactivated", "copied"]
 
 type resultValue = {
     visible: boolean;

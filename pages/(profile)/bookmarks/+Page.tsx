@@ -12,6 +12,7 @@ import { updateQuery } from "../../../store/slices/query";
 import { activeTab } from "../../../store/slices/savedTab";
 import { useMediaQuery } from "../../../utils/mediaQuery";
 import useColor from "../../../utils/colors";
+import { useInfiniteScroll } from "../../../utils/infiniteScroll";
 
 const Page = () => {
     const dispatch = useAppDispatch()
@@ -20,53 +21,21 @@ const Page = () => {
     const query = useAppSelector((state) => state.query.value);
     const savedTab = useAppSelector((state) => state.savedTab.value)
 
-    const [total, setTotal] = useState<number>(0);
-    const [currentPage, setCurrentPage] = useState<number>(0);
-
     const useQueryResult = useGetSavedInfiniteQuery({ query: query })
     const { data, isFetching, fetchNextPage, refetch } = useQueryResult
+
+    const { total, currentPage } = useInfiniteScroll({
+        data: data,
+        isFetching: isFetching,
+        fetchNextPage: fetchNextPage,
+        refetch: refetch,
+        query: query
+    })
 
 
     useEffect(() => {
         dispatch(updateQuery(""))
     }, [])
-
-    useMemo(() => {
-        if (data) {
-            const lastPageParam = data.pageParams.at(-1);
-            if (lastPageParam !== undefined) {
-                setCurrentPage(lastPageParam);
-            }
-            if (data.pages.length > 0) {
-                const firstPage = data.pages[0]
-                setTotal(firstPage.pages);
-            }
-
-        }
-    }, [data])
-
-
-    const handleScroll = () => {
-
-        if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight && !isFetching) {
-            if (currentPage < total) {
-                fetchNextPage();
-            }
-
-        }
-    }
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [data]);
-
-    useEffect(() => {
-        refetch()
-    }, [query])
 
     if (!data) return null;
 
