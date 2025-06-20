@@ -1,12 +1,14 @@
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { BookmarkIcon } from "@heroicons/react/24/solid";
-import { useAddSavedMutation } from "../../../store/api/profile";
 import { useEffect } from "react";
-import { Bookmark } from "../../../utils/types";
-import { useMediaQuery } from "../../../store/hooks";
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { useAddSavedMutation } from "../../../store/api/profile";
 import { close } from "../../../store/slices/popup";
 import { dispatchResult } from "../../../utils/dispatchResult";
+import { Bookmark } from "../../../utils/types";
+import { useMediaQuery } from "../../../utils/mediaQuery";
 import useColor from "../../../utils/colors";
+
+import { BookmarkIcon } from "@heroicons/react/24/solid";
 
 type BookmarksProps = {
     username: string;
@@ -19,14 +21,14 @@ type BookmarksProps = {
 const Bookmarks = ({ username, collection, rec, userHighlight, userBookmarks }: BookmarksProps) => {
     const dispatch = useAppDispatch()
     const highlight = useColor(userHighlight)
-    const activeUser = useAppSelector((state) => state.activeUser.value)
-
     const isLG = useMediaQuery()
 
-    const [performAddBookmark, result] = useAddSavedMutation()
+    const activeUser = useAppSelector((state) => state.activeUser.value)
 
-    const addBookmark = async () => {
-        performAddBookmark({
+    const [useAddSaved, result] = useAddSavedMutation()
+
+    const performAddSaved = async () => {
+        await useAddSaved({
             username: username,
             collection: collection,
             rec: rec
@@ -54,11 +56,11 @@ const Bookmarks = ({ username, collection, rec, userHighlight, userBookmarks }: 
                     <div className={`px-5 py-1
                     ${isLG ? "" : "cursor-pointer"}    
                     `}
-                        onClick={isLG ? () => { } : addBookmark}
+                        onClick={isLG ? () => { } : performAddSaved}
                     >
                         <BookmarkIcon
                             title="Add to bookmarks"
-                            onClick={!isLG ? () => { } : addBookmark}
+                            onClick={!isLG ? () => { } : performAddSaved}
                             className={`size-5
                         ${isLG ? "cursor-pointer" : ""}
                         ${(userBookmarks && userBookmarks.bookmarks.includes(rec)) ?

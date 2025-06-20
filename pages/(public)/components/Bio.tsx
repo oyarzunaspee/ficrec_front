@@ -1,10 +1,9 @@
 import { navigate } from "vike/client/router";
+
 import useColor from "../../../utils/colors";
 
 const Bio = ({ avatar, userHighlight, username, bio }: { avatar?: string, userHighlight?: string, username: string, bio?: string }) => {
     const highlight = useColor(userHighlight)
-
-    const highlightValue = `text-${highlight ? highlight : "grave"}`
 
     return (
         <>

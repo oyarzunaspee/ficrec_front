@@ -1,11 +1,14 @@
-import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { useEffect, useState } from "react";
-import { updateQuery } from "../../../../store/slices/query";
-import { useToggleCollectionMutation } from "../../../../store/api/profile";
+import { useState } from "react";
 import { usePageContext } from "vike-react/usePageContext";
+
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { useToggleCollectionMutation } from "../../../../store/api/profile";
+import { updateQuery } from "../../../../store/slices/query";
 import { useOutsideClick } from "../../../../utils/outsideClick";
-import { ArrowPathIcon, AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
 import useColor from "../../../../utils/colors";
+
+import { ArrowPathIcon, AdjustmentsHorizontalIcon } from "@heroicons/react/24/solid";
+
 
 const Filter = () => {
     const dispatch = useAppDispatch()
@@ -25,20 +28,18 @@ const Filter = () => {
 }
 
 const Toggle = () => {
-    const context = usePageContext();
+    const { routeParams } = usePageContext();
     const highlight = useColor()
-
-    const [open, setOpen] = useState(false);
 
     const collectionDisplay = useAppSelector((state) => state.collectionDisplay.value);
 
-
+    const [open, setOpen] = useState<boolean>(false);
 
     const optionals = Object.keys(collectionDisplay);
 
-    const [toggleCollection, result] = useToggleCollectionMutation();
-    const handleToggle = (toggle: string) => {
-        toggleCollection({ uid: context.routeParams.collection, data: { toggle: toggle } })
+    const [useToggleCollection, result] = useToggleCollectionMutation();
+    const performToggleCollection = async (toggle: string) => {
+        await useToggleCollection({ uid: routeParams.collection, data: { toggle: toggle } })
             .unwrap()
             .then(() => {
             })
@@ -78,7 +79,7 @@ const Toggle = () => {
                                         className="mb-2 text-sm align-middle flex items-center font-medium"
                                         >
                                             <input
-                                                onChange={() => handleToggle(item)}
+                                                onChange={() => performToggleCollection(item)}
                                                 checked={collectionDisplay[item as keyof typeof collectionDisplay] ? true : false}
                                                 type="checkbox" name={item} 
                                                 className={`mr-2 ${highlight.accent}`} 

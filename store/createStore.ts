@@ -12,7 +12,6 @@ import { privacyTabSlice } from "./slices/privacyTab";
 import { savedTabSlice } from "./slices/savedTab";
 import highlightSlice from "./slices/highlight";
 import navSlice from "./slices/nav";
-import publicHighlightSlice from "./slices/publicHighlight";
 import popupSlice from "./slices/popup";
 import { collectionDisplaySlice } from "./slices/collectionDisplay";
 import { querySlice } from "./slices/query";
@@ -32,8 +31,7 @@ const reducer = combineReducers({
   popup: popupSlice,
   collectionDisplay: collectionDisplaySlice.reducer,
   query: querySlice.reducer,
-  resultMessage: resultMessageSlice.reducer,
-  publicHighlight: publicHighlightSlice
+  resultMessage: resultMessageSlice.reducer
 })
 
 

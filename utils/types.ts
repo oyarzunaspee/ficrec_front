@@ -24,23 +24,23 @@ export type UserCollection = {
 export type User = {
   uid: string;
   username: string;
-  avatar?: string | undefined;
-  bio?: string | undefined;
-  highlight?: string | undefined;
-  collections: Array<UserCollection> | [];
+  avatar: string | undefined;
+  bio: string | undefined;
+  highlight: string;
+  collections: Array<UserCollection>;
 }
 
 export type PublicUser = {
     username: string;
-    avatar?: string | undefined;
-    bio?: string | undefined;
-    highlight?: string | undefined;
+    avatar: string | undefined;
+    bio: string | undefined;
+    highlight: string;
 }
 
 export type Collection = {
     uid: string;
     name: string;
-    about?: string | undefined;
+    about: string | undefined;
     private: boolean;
     fandom: boolean;
     ship: boolean;
@@ -54,7 +54,7 @@ export type PublicCollection = {
     uid: string;
     reader: PublicUser;
     name: string;
-    about?: string | undefined;
+    about: string | undefined;
     fandom: boolean;
     ship: boolean;
     warnings: boolean;
@@ -72,16 +72,16 @@ export type Rec = {
     fandom: Array<string>;
     rating: string;
     warnings: Array<string>;
-    ship: Array<string> | void;
-    characters: Array<string> | [];
-    tags: Array<string> | [];
-    summary: string | void;
-    notes: string | void;
+    ship: Array<string>;
+    characters: Array<string>;
+    tags: Array<string>;
+    summary: string | undefined;
+    notes: string | undefined;
     link: string;
 }
 
 export type Bookmark = {
-    bookmarks: string[] | [];
+    bookmarks: string[];
 }
 
 type SavedCollection = {

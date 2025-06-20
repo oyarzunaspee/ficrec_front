@@ -1,18 +1,17 @@
-import { useForm, Resolver } from "react-hook-form";
-import CardFooter from "../../components/CardFooter.js";
 import { useEffect } from "react";
+import { navigate } from 'vike/client/router'
+import { useForm, Resolver } from "react-hook-form";
 
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import CardHead from "../../components/CardHead";
+import FormGroup from "../../components/FormGroup.js";
+
+import type { LogInInput } from "../../utils/types.js";
 
 import { useAppDispatch, useAppSelector } from "../../store/hooks.js";
 import { useLoginMutation } from "../../store/api/auth";
-import { navigate } from 'vike/client/router'
 import { refreshToken } from "../../store/slices/token";
-import CardHead from "../../components/CardHead";
-import { LogInInput } from "../../utils/types.js";
-import { ComponentType, ComponentProps } from "react";
-import FormGroup from "../../components/FormGroup.js";
-import { IconTag, onClickType } from "../../components/types.js";
+
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 
 type FormValues = {
     username: string
@@ -36,7 +35,8 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 
 
-export function LogIn({ icon, onClick }: { icon: IconTag, onClick: onClickType }) {
+const LogIn = () => {
+    const dispatch = useAppDispatch();
 
     const {
         register,
@@ -44,20 +44,18 @@ export function LogIn({ icon, onClick }: { icon: IconTag, onClick: onClickType }
         formState: { errors },
     } = useForm<FormValues>({ resolver })
 
-    const [logIn, result] = useLoginMutation();
-
-    const dispatch = useAppDispatch();
+    const [useLogin, result] = useLoginMutation();
 
 
-    const onSubmitLogIn = handleSubmit((data: FormValues) => {
-        logIn(data as LogInInput)
+
+    const performLogin = handleSubmit((data: FormValues) => {
+        useLogin(data as LogInInput)
             .unwrap()
             .then((res) => {
                 dispatch(refreshToken(res.token))
             })
     })
 
-    const token = useAppSelector((state) => state.token.value)
     useEffect(() => {
         if (result.isSuccess) {
             navigate("/");
@@ -67,13 +65,12 @@ export function LogIn({ icon, onClick }: { icon: IconTag, onClick: onClickType }
 
     return (
         <>
+        <div className="card w-full">
             <CardHead
                 title="Login"
-                onClick={onClick}
-                CornerIcon={icon}
             />
             <div className="card-body">
-                <form onSubmit={onSubmitLogIn}>
+                <form onSubmit={performLogin}>
                     <div className="content">
                         <FormGroup
                             name="username"
@@ -94,7 +91,6 @@ export function LogIn({ icon, onClick }: { icon: IconTag, onClick: onClickType }
                             })}
                         />
                     </div>
-                    <div className="lg:absolute lg:bottom-5 lg:right-5">
 
                         <div className="card-footer pb-5">
                             <button
@@ -108,11 +104,12 @@ export function LogIn({ icon, onClick }: { icon: IconTag, onClick: onClickType }
                                 }
                             </button>
                         </div>
-                    </div>
+
                 </form>
+            </div>
             </div>
         </>
     )
 }
 
-export default LogIn
+export default LogIn;

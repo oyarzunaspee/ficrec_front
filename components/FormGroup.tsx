@@ -1,15 +1,15 @@
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import { useAppSelector } from "../store/hooks";
 import { UseFormRegisterReturn } from "react-hook-form";
-import { FieldErrors } from "react-hook-form";
+
 import useColor from "../utils/colors";
+
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 
 
 type FormProps = {
     disabled?: boolean;
     name: string;
     label: string;
-    errors?: FieldErrors;
+    errors?: string | undefined;
     type?: string;
     single?: boolean;
     register: UseFormRegisterReturn<string>;
@@ -50,7 +50,7 @@ export function FormGroup({ disabled, name, label, errors, type, single, registe
                         htmlFor={name}>
                         {label}
                         <span>
-                            {errors?.root?.message}
+                            {errors}
                         </span>
                     </label>
                     {single ?

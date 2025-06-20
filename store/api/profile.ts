@@ -1,37 +1,13 @@
+import { SetStateAction } from "react";
 import { createApi } from "@reduxjs/toolkit/query/react";
 import { baseQueryWithReauth } from "./baseQuery";
 import type { User, Collection, Rec, Saved } from "../../utils/types";
-import { SetStateAction } from "react";
-
-type AddRecInput = {
-  uid: Pick<Collection, "uid">;
-  body: Partial<Rec>;
-}
-
-type GetRecsQueryArg = {
-  collection: Pick<Collection, "uid">;
-  query: string;
-}
-
-type DeleteRecInput = {
-  collection: Pick<Collection, "uid">;
-  uid: Pick<Rec, "uid">;
-}
-
-type ChangeUsernameInput = {
-  new_username: string;
-}
 
 type RecResultOutput = {
   current: number;
   next: number | undefined;
   pages: number;
-  result: Rec[];
-}
-
-type RecInfiniteQueryOutput = {
-  pageParams: SetStateAction<number>;
-  pages: RecResultOutput[];
+  results: Rec[];
 }
 
 type SavedResultOutput = {
@@ -39,11 +15,6 @@ type SavedResultOutput = {
   next: number | undefined;
   pages: number;
   result: Saved[];
-}
-
-type SavedInfiniteQueryOutput = {
-  pageParams: SetStateAction<number>;
-  pages: SavedResultOutput[];
 }
 
 type SavedInput = {
@@ -72,7 +43,7 @@ export const profileApi = createApi({
       }),
       invalidatesTags: ["user"]
     }),
-    changeUsername: builder.mutation<User, ChangeUsernameInput>({
+    changeUsername: builder.mutation<User, {new_username: string}>({
       query: (body) => ({
         url: "/auth/user/username/",
         method: "POST",
@@ -118,7 +89,7 @@ export const profileApi = createApi({
       }),
       invalidatesTags: ["recs", "collection"]
     }),
-    getRecs: builder.infiniteQuery<RecInfiniteQueryOutput, { uid: string, query: string }, number>({
+    getRecs: builder.infiniteQuery<RecResultOutput, { uid: string, query: string }, number>({
       infiniteQueryOptions: {
         initialPageParam: 1,
         getNextPageParam: (
@@ -171,7 +142,7 @@ export const profileApi = createApi({
       }),
       invalidatesTags: ["bookmarks"]
     }),
-    getSaved: builder.infiniteQuery<SavedInfiniteQueryOutput, { query: string }, number>({
+    getSaved: builder.infiniteQuery<SavedResultOutput, { query: string }, number>({
       infiniteQueryOptions: {
         initialPageParam: 1,
         getNextPageParam: (
@@ -200,14 +171,7 @@ export const profileApi = createApi({
         method: "PATCH"
       }),
       invalidatesTags: ["saved"]
-    }),
-    // getFindRecs: builder.query<FindRecsResultOutput, {data: {query: string[]}, page: number, type: string}>({
-    //   query: ({data, page, type}) => ({
-    //     url: `/profile/find/?page=${page || 1}&type=${type}`,
-    //     method: "GET",
-    //     body: data
-    //   })
-    // }),
+    })
   })
 });
 

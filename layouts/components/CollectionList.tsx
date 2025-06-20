@@ -1,6 +1,7 @@
 import { usePageContext } from "vike-react/usePageContext";
+
 import { useAppSelector } from "../../store/hooks";
-import { useMediaQuery } from "../../store/hooks";
+import { useMediaQuery } from "../../utils/mediaQuery";
 import useColor from "../../utils/colors";
 
 type CollectionData = {
@@ -11,12 +12,12 @@ type CollectionData = {
 }
 
 const ColletionList = ({ collections }: { collections: Array<CollectionData> }) => {
-    const context = usePageContext()
+    const { routeParams } = usePageContext()
+    const highlight = useColor()
+    const isLG = useMediaQuery();
 
     const privacyTab = useAppSelector((state) => state.privacyTab.value);
-    const highlight = useColor()
 
-    const isLG = useMediaQuery();
 
     if (isLG) {
         return (
@@ -28,10 +29,10 @@ const ColletionList = ({ collections }: { collections: Array<CollectionData> }) 
                                 <a key={col.uid} href={`/collections/${col.uid}`}>
                                     <div key={col.uid} className="cursor-pointer py-3 px-10 text-sm border-b rounded-none border-gray-100 hover:bg-hover">
                                         <div className="flex justify-between items-center">
-                                            <h2 className={context.routeParams.collection == col.uid ? highlight.text : "text-secondary"}>
+                                            <h2 className={routeParams.collection == col.uid ? highlight.text : "text-secondary"}>
                                                 {col.name}
                                             </h2>
-                                            <span className={context.routeParams.collection == col.uid ? highlight.text : "text-primary"}>
+                                            <span className={routeParams.collection == col.uid ? highlight.text : "text-primary"}>
                                                 {col.recs}
                                             </span>
                                         </div>

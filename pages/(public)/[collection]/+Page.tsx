@@ -1,28 +1,39 @@
-import "../../../layouts/style.css";
-import { useData } from "vike-react/useData";
-import { Data } from "./+data";
-import Bio from "../components/Bio";
 import { useEffect, useState, useMemo } from "react";
-import { useGetRecsInfiniteQuery } from "../../../store/api/public";
-import { MagnifyingGlassIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
-import { PublicCollection, Rec } from "../../../utils/types";
-import IndividualRec from "./Rec";
-import ScrollButton from "../../../layouts/components/ScrollButton";
-import { useGetBookmarksQuery } from "../../../store/api/profile";
-import { useAppDispatch, useAppSelector, useMediaQuery } from "../../../store/hooks";
-import { active } from "../../../store/slices/activeUser";
-import ResultMessage from "../../../layouts/components/ResultMessage";
+import { useData } from "vike-react/useData";
 import { navigate } from "vike/client/router";
-import useColor from "../../../utils/colors";
 
-const Profile = () => {
-    const dispatch = useAppDispatch()
-    const activeUser = useAppSelector((state) => state.activeUser.value)
-    
-    const isLG = useMediaQuery()
-    
+import { Data } from "./+data";
+import IndividualRec from "./Rec";
+import Bio from "../components/Bio";
+import ResultMessage from "../../../layouts/components/ResultMessage";
+import useColor from "../../../utils/colors";
+import ScrollButton from "../../../layouts/components/ScrollButton";
+
+import { PublicCollection, Rec } from "../../../utils/types";
+import type { RecResultOutput } from "../../../store/api/public";
+
+import "../../../layouts/style.css";
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { useGetRecsInfiniteQuery } from "../../../store/api/public";
+import { useGetBookmarksQuery } from "../../../store/api/profile";
+import { active } from "../../../store/slices/activeUser";
+import { useMediaQuery } from "../../../utils/mediaQuery";
+import { useInfiniteScroll } from "../../../utils/infiniteScroll";
+
+import { MagnifyingGlassIcon, ArrowPathIcon } from "@heroicons/react/24/outline";
+
+const Page = () => {
     const collection = useData<Data>();
-    const highlight = useColor(collection?.reader.highlight)
+
+    const dispatch = useAppDispatch()
+    const isLG = useMediaQuery()
+
+    const highlight = useColor(collection ? collection.reader.highlight : "default")
+
+    const activeUser = useAppSelector((state) => state.activeUser.value)
+
+
 
     const { data, isError, isSuccess, isLoading } = useGetBookmarksQuery()
 
@@ -34,7 +45,7 @@ const Profile = () => {
 
     if (!collection) return null;
 
-    const [scroll, setScroll] = useState(false);
+    const [scroll, setScroll] = useState<boolean>(false);
 
     const handleScroll = () => {
         const position = window.pageYOffset;
@@ -151,20 +162,7 @@ const ScrollBio = ({ scroll, name, highlight }: { scroll: boolean, name: string,
 }
 
 const Recs = ({ userData, collection }: { userData?: { bookmarks: string[] }, collection: PublicCollection }) => {
-
-    const [open, setOpen] = useState<string | null>(null)
-    const [currentPage, setCurrentPage] = useState<number | undefined>(0)
-    const [total, setTotal] = useState<number | undefined>(0)
     const [query, setQuery] = useState<string>("")
-
-    const handleOpen = (name: string) => {
-        if (open != name) {
-            setOpen(name)
-        } else {
-            setOpen(null)
-        }
-    }
-
 
     const show = {
         fandom: collection.fandom,
@@ -174,14 +172,6 @@ const Recs = ({ userData, collection }: { userData?: { bookmarks: string[] }, co
         tags: collection.tags,
     }
 
-
-
-    useEffect(() => {
-        if (query.length > 2) {
-            refetch()
-        }
-    }, [query])
-
     const useQueryResult = useGetRecsInfiniteQuery({
         username: collection.reader.username,
         uid: collection.uid,
@@ -189,33 +179,14 @@ const Recs = ({ userData, collection }: { userData?: { bookmarks: string[] }, co
     })
     const { data, isFetching, fetchNextPage, refetch } = useQueryResult
 
-    useMemo(() => {
-        if (data) {
+    const { total, currentPage } = useInfiniteScroll({
+        data: data,
+        isFetching: isFetching,
+        fetchNextPage: fetchNextPage,
+        refetch: refetch,
+        query: query
+    })
 
-            setCurrentPage(data.pageParams.at(-1))
-            if (data.pages.length > 0) {
-                setTotal(data.pages[0].pages)
-            }
-
-        }
-    }, [data])
-
-    const handleScroll = () => {
-
-        if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight && !isFetching) {
-            if (currentPage && total && (currentPage < total)) {
-                fetchNextPage()
-            }
-        }
-    }
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [data]);
 
     if (!data) return null;
 
@@ -264,5 +235,4 @@ const Recs = ({ userData, collection }: { userData?: { bookmarks: string[] }, co
 }
 
 
-export default Profile;
-
+export default Page;

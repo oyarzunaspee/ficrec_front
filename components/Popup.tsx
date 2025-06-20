@@ -1,7 +1,8 @@
-import { ReactNode } from "react";
+import { ReactNode, RefObject } from "react";
+
 import CardHead from "./CardHead";
+
 import { XCircleIcon } from "@heroicons/react/24/solid";
-import { RefObject } from "react";
 
 const Popup = ({ ref, title, body, open, setOpen }: { ref: RefObject<HTMLDivElement | null>, title: string, body?: ReactNode, open: boolean, setOpen: Function }) => {
 

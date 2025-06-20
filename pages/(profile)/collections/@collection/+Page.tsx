@@ -1,14 +1,15 @@
 import About from "./About";
 import Filter from "./Filter";
 import RecList from "./RecList";
-import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { useOutsideClick } from "../../../../utils/outsideClick";
-import { close } from "../../../../store/slices/popup";
 import Popup from "../../../../components/Popup";
 import Form from "../../recs/new/Form";
 
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { close } from "../../../../store/slices/popup";
+import { useOutsideClick } from "../../../../utils/outsideClick";
 
-const CollectionDetail = () => {
+
+const Page = () => {
 
     return (
         <>
@@ -45,4 +46,4 @@ const NewPopUp = () => {
     )
 }
 
-export default CollectionDetail;
+export default Page;

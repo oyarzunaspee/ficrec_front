@@ -1,14 +1,15 @@
 import { useState, MouseEventHandler } from "react";
-import { ExclamationTriangleIcon, Bars3BottomLeftIcon, BookOpenIcon } from "@heroicons/react/24/outline";
-import { BookmarkIcon } from "@heroicons/react/24/solid";
-import { Rec } from "../../../utils/types";
-import parse from "html-react-parser";
-import { useOutsideClick } from "../../../utils/outsideClick";
+
 import Bookmarks from "./Bookmarks";
-import { Bookmark } from "../../../utils/types";
+
+import type { Rec, Bookmark } from "../../../utils/types";
+
 import { formatWords } from "../../../utils/formatWords";
 import useColor from "../../../utils/colors";
+import { useOutsideClick } from "../../../utils/outsideClick";
 
+import parse from "html-react-parser";
+import { ExclamationTriangleIcon, Bars3BottomLeftIcon, BookOpenIcon } from "@heroicons/react/24/outline";
 
 type ShowProp = {
     fandom: boolean;
@@ -29,6 +30,7 @@ type RecProps = {
 
 const IndividualRec = ({ rec, userHighlight, show, collection, username, userBookmarks }: RecProps) => {
     const highlight = useColor(userHighlight)
+
     const optionals = Object.values(show).filter((v) => v).length
 
     const [open, setOpen] = useState<string | null>(null)
@@ -187,6 +189,7 @@ type OptionalProps = {
 
 const Optional = ({ name, onClick, open, setOpen, userHighlight }: OptionalProps) => {
     const highlight = useColor(userHighlight)
+    
     const ref = useOutsideClick(() => {
         setOpen(null)
     });

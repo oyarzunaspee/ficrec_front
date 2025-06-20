@@ -1,12 +1,14 @@
+import { useState } from "react";
+import { useForm } from "react-hook-form";
+
 import CardHead from "../../../components/CardHead";
 import FormGroup from "../../../components/FormGroup";
 import CardFooter from "../../../components/CardFooter";
+
 import { useChangePasswordMutation, useVerifyPasswordMutation } from "../../../store/api/user";
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
-import { useState } from "react";
-import { useForm } from "react-hook-form";
 import { dispatchResult } from "../../../utils/dispatchResult";
 
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 
 type FormValues = {
     password: string;
@@ -14,7 +16,7 @@ type FormValues = {
 
 const Password = ({ open, setOpen }: { open: number, setOpen: Function }) => {
 
-    const [verified, setVerified] = useState(false);
+    const [verified, setVerified] = useState<boolean>(false);
 
     const {
         register,
@@ -22,9 +24,9 @@ const Password = ({ open, setOpen }: { open: number, setOpen: Function }) => {
         formState: { errors },
     } = useForm<FormValues>()
 
-    const [verifyPassword, result] = useVerifyPasswordMutation();
-    const submitVerify = handleSubmit((data: FormValues) => {
-        verifyPassword(data)
+    const [useVerifyPassword, result] = useVerifyPasswordMutation();
+    const performVerifyPassword = handleSubmit((data: FormValues) => {
+        useVerifyPassword(data)
             .unwrap()
             .then(() => {
                 setVerified(true);
@@ -57,7 +59,7 @@ const Password = ({ open, setOpen }: { open: number, setOpen: Function }) => {
                 />
                 <div className="card-body accordeon transition-height">
                     <div className="content">
-                        <form onSubmit={submitVerify}>
+                        <form onSubmit={performVerifyPassword}>
                             <div className="mb-5">
                                 <FormGroup
                                     register={register("password", { required: true })}
@@ -90,9 +92,9 @@ const Verify = ({ verified, setVerified }: { verified: boolean, setVerified: Fun
         formState: { errors },
     } = useForm<VerifyFormValues>()
 
-    const [changePassword, result] = useChangePasswordMutation();
-    const submitPassword = handleSubmit((data: VerifyFormValues) => {
-        changePassword(data)
+    const [useChangePassword, result] = useChangePasswordMutation();
+    const performChangePassword = handleSubmit((data: VerifyFormValues) => {
+        useChangePassword(data)
             .unwrap()
             .then(() => {
                 setVerified(false)
@@ -101,7 +103,7 @@ const Verify = ({ verified, setVerified }: { verified: boolean, setVerified: Fun
 
     return (
         <>
-            <form onSubmit={submitPassword}>
+            <form onSubmit={performChangePassword}>
                 <FormGroup
                     register={register("password", { required: true })}
                     errors={errors.password?.message}

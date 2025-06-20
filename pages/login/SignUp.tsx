@@ -1,11 +1,11 @@
 import { useForm, Resolver } from "react-hook-form";
-import { useSignUpMutation } from "../../store/api/auth";
-import { SignUpInput } from "../../utils/types";
+
 import CardFooter from "../../components/CardFooter";
 import CardHead from "../../components/CardHead";
 import FormGroup from "../../components/FormGroup";
-import { ComponentType, ComponentProps } from "react";
-import { IconTag, onClickType } from "../../components/types";
+
+import { useSignUpMutation } from "../../store/api/auth";
+
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
 
 type FormValues = {
@@ -13,8 +13,6 @@ type FormValues = {
     password: string;
     password_check: string;
 }
-
-type Icon = ComponentType<ComponentProps<'svg'>>;
 
 const resolver: Resolver<FormValues> = async (values) => {
     return {
@@ -30,7 +28,7 @@ const resolver: Resolver<FormValues> = async (values) => {
     }
 }
 
-export function SignUp({ icon, onClick }: { icon: IconTag, onClick: onClickType }) {
+const SignUp = () => {
     const {
             register,
             handleSubmit,
@@ -38,11 +36,11 @@ export function SignUp({ icon, onClick }: { icon: IconTag, onClick: onClickType 
             formState: { errors },
         } = useForm<FormValues>({ resolver })
 
-    const [signUp, result] = useSignUpMutation()
+    const [useSignup, result] = useSignUpMutation()
     
-    const onSubmitSignUp = handleSubmit((data: FormValues) => {
+    const performSignup = handleSubmit((data: FormValues) => {
     
-        signUp(data)
+        useSignup(data)
             .unwrap()
             .then(() => {
                 reset({
@@ -58,13 +56,12 @@ export function SignUp({ icon, onClick }: { icon: IconTag, onClick: onClickType 
 
         return (
             <>
+            <div className="card w-full">
                 <CardHead
                     title="Create account"
-                    onClick={onClick}
-                    CornerIcon={icon}
                 />
                 <div className="card-body">
-                    <form onSubmit={onSubmitSignUp}>
+                    <form onSubmit={performSignup}>
                         <div className="content">
                             <FormGroup
                                 name="username"
@@ -109,6 +106,7 @@ export function SignUp({ icon, onClick }: { icon: IconTag, onClick: onClickType 
                             </button>
                         </div>
                     </form>
+                </div>
                 </div>
             </>
         )

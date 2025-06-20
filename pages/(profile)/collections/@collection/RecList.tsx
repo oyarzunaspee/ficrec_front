@@ -1,74 +1,45 @@
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import { useGetRecsInfiniteQuery } from "../../../../store/api/profile";
-import { useState, useEffect, useMemo } from "react";
-import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { useEffect } from "react";
 import { usePageContext } from "vike-react/usePageContext";
-import Rec from "./Rec";
-import { updateQuery } from "../../../../store/slices/query";
+
+import IndividualRec from "./Rec";
 import Loading from "../../../../components/Loading";
+
+import type { Rec } from "../../../../utils/types";
+
+import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
+import { useGetRecsInfiniteQuery } from "../../../../store/api/profile";
+import { updateQuery } from "../../../../store/slices/query";
+import { useInfiniteScroll } from "../../../../utils/infiniteScroll";
 
 const RecList = () => {
     const dispatch = useAppDispatch()
-    const context = usePageContext();
+    const { routeParams } = usePageContext();
+
     const query = useAppSelector((state) => state.query.value);
 
-    const [total, setTotal] = useState<number>(0);
-    const [currentPage, setCurrentPage] = useState(0);
-
-    const useQueryResult = useGetRecsInfiniteQuery({ uid: context.routeParams.collection, query: query })
+    const useQueryResult = useGetRecsInfiniteQuery({ uid: routeParams.collection, query: query })
     const { data, isFetching, fetchNextPage, refetch } = useQueryResult
 
     useEffect(() => {
         dispatch(updateQuery(""))
     }, [])
 
-    useMemo(() => {
-        if (data) {
-            const lastPageParam = data.pageParams.at(-1);
-            if (lastPageParam !== undefined) {
-                setCurrentPage(lastPageParam);
-            }
-            if (data.pages.length > 0) {
-                setTotal(data.pages[0].pages);
-            }
+    const { total, currentPage } = useInfiniteScroll({
+        data: data,
+        isFetching: isFetching,
+        fetchNextPage: fetchNextPage,
+        refetch: refetch,
+        query: query
+    })
 
-        }
-    }, [data])
-
-
-    const handleScroll = () => {
-
-        if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight && !isFetching) {
-            if (currentPage < total) {
-                fetchNextPage();
-            }
-
-        }
-    }
-
-    useEffect(() => {
-
-        window.addEventListener('scroll', handleScroll);
-
-
-        return () => {
-
-            window.removeEventListener('scroll', handleScroll);
-
-        };
-    }, [data]);
-
-    useEffect(() => {
-        refetch()
-    }, [query])
 
     if (data) {
         return (
             <>
-                {data.pages.map((result) => {
-                    return result.results.map((rec) => {
+                {data.pages.map((page) => {
+                    return page.results.map((rec: Rec) => {
                         return (
-                            <Rec
+                            <IndividualRec
                                 key={rec.uid}
                                 uid={rec.uid}
                                 title={rec.title}

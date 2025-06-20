@@ -135,7 +135,7 @@ type ColorsValues = {
     slate: ColorsTypes;
 }
 
-const useColor = (userHighlight?: string) => {
+const useColor = (userHighlight?: string | undefined) => {
     if (userHighlight) {
         return Colors[userHighlight as keyof ColorsValues]
     } else {

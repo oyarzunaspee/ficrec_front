@@ -1,6 +1,5 @@
 import vikeReact from "vike-react/config";
 import type { Config } from "vike/types";
-import vikeReactQuery from 'vike-react-query/config'
 // import Layout from "../layouts/LayoutDefault";
 
 // Default config (can be overridden by pages)
@@ -11,9 +10,9 @@ export default {
   // Layout,
 
   // https://vike.dev/head-tags
-  title: "My Vike App",
-  description: "Demo showcasing Vike",
+  title: "ficrec",
+  description: "for fic recs",
   prerender: false,
   ssr: false,
-  extends: [vikeReact, vikeReactQuery],
+  extends: [vikeReact],
 } satisfies Config;

@@ -2,7 +2,7 @@ import CardHead from "../../../../components/CardHead";
 import Form from "./Form";
 
 
-const New = () => {
+const Page = () => {
 
     return (
         <section className="card">
@@ -16,4 +16,4 @@ const New = () => {
     )
 }
 
-export default New;
+export default Page;

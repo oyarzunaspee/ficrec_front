@@ -1,6 +1,19 @@
-import useColor from "../../../utils/colors";
-import type { Saved } from "../../../utils/types";
 import { useState } from "react";
+
+import CardFooter from "../../../components/CardFooter";
+import Popup from "../../../components/Popup";
+import Dropdown from "../../../components/Dropdown";
+
+import type { Saved } from "../../../utils/types";
+
+import { useDeleteSavedMutation, useMarkAsReadMutation } from "../../../store/api/profile";
+import { useOutsideClick } from "../../../utils/outsideClick";
+import { formatWords } from "../../../utils/formatWords";
+import { dispatchResult } from "../../../utils/dispatchResult";
+import { useMediaQuery } from "../../../utils/mediaQuery";
+import useColor from "../../../utils/colors";
+
+import { XCircleIcon } from "@heroicons/react/24/solid";
 import {
     ExclamationTriangleIcon,
     Bars3BottomLeftIcon,
@@ -11,21 +24,13 @@ import {
     TrashIcon,
     XMarkIcon
 } from "@heroicons/react/24/outline";
-import { XCircleIcon } from "@heroicons/react/24/solid";
-import { formatWords } from "../../../utils/formatWords";
-import { useOutsideClick } from "../../../utils/outsideClick";
-import { useMediaQuery } from "../../../store/hooks";
-import CardFooter from "../../../components/CardFooter";
-import Popup from "../../../components/Popup";
-import Dropdown from "../../../components/Dropdown";
-import { dispatchResult } from "../../../utils/dispatchResult";
-import { useDeleteSavedMutation } from "../../../store/api/profile";
-import { useMarkAsReadMutation } from "../../../store/api/profile";
 
 const IndividualSaved = ({ saved }: { saved: Saved }) => {
     const highlight = useColor()
-    const [deleteBookmark, setDeleteBookmark] = useState(false)
-    const [dropdown, setDropdown] = useState(false);
+
+    const [deleteBookmark, setDeleteBookmark] = useState<boolean>(false)
+    const [dropdown, setDropdown] = useState<boolean>(false);
+
     return (
         <div key={saved.uid} className="card pb-7 pt-3 mb-5 relative">
             <div
@@ -170,14 +175,15 @@ type MenuProps = {
 }
 
 const Menu = ({ setDeleteBookmark, dropdown, setDropdown, uid, read }: MenuProps) => {
-    const [markAsRead, result] = useMarkAsReadMutation()
+    
+    const [useMarkAsRead, result] = useMarkAsReadMutation()
 
     const items = [
         {
             title: read ? "Mark as unread" : "Mark as read",
             Icon: read ? XMarkIcon : CheckIcon,
             click: () => {
-                markAsRead(uid)
+                useMarkAsRead(uid)
                 .unwrap()
                 .then(() => setDropdown(false))
             }
@@ -213,10 +219,10 @@ const Menu = ({ setDeleteBookmark, dropdown, setDropdown, uid, read }: MenuProps
 const DeleteBookmark = ({ deleteBookmark, setDeleteBookmark, title, uid }: { deleteBookmark: boolean, setDeleteBookmark: Function, title: string, uid: string }) => {
     const isLG = useMediaQuery();
 
-    const [deleteSaved, result] = useDeleteSavedMutation()
+    const [useDeleteSaved, result] = useDeleteSavedMutation()
 
     const performDelete = async () => {
-        deleteSaved(uid)
+        await useDeleteSaved(uid)
             .unwrap()
             .then(() => {
                 setDeleteBookmark(false)

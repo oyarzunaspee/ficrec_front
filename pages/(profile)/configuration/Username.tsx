@@ -1,9 +1,12 @@
+import { useForm } from "react-hook-form";
+
 import CardHead from "../../../components/CardHead";
 import FormGroup from "../../../components/FormGroup";
-import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
-import { useForm } from "react-hook-form";
+
 import { useChangeUsernameMutation } from "../../../store/api/profile";
 import { dispatchResult } from "../../../utils/dispatchResult";
+
+import { ChevronUpIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 
 type FormValues = {
     username: string;
@@ -21,9 +24,9 @@ const Username = ({ open, setOpen, username }: { open: number, setOpen: Function
         }
     })
 
-    const [changeUsername, result] = useChangeUsernameMutation();
-    const submitUsername = handleSubmit((data: FormValues) => {
-        changeUsername({ new_username: data.username })
+    const [useChangeUsername, result] = useChangeUsernameMutation();
+    const performChangeUsername = handleSubmit((data: FormValues) => {
+        useChangeUsername({ new_username: data.username })
             .unwrap()
             .then(() => {
             })
@@ -56,7 +59,7 @@ const Username = ({ open, setOpen, username }: { open: number, setOpen: Function
                     CornerIcon={open == 2 ? ChevronUpIcon : ChevronDownIcon}
                 />
                 <div className="card-body accordeon transition-height">
-                    <form onSubmit={submitUsername}>
+                    <form onSubmit={performChangeUsername}>
                         <div className="content">
                             <FormGroup
                                 register={register("username", { required: true })}

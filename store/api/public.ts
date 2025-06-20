@@ -1,5 +1,5 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import { SetStateAction } from "react";
+import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import type { Rec, FindQuery } from "../../utils/types";
 
 export type RecResultOutput = {
@@ -9,28 +9,18 @@ export type RecResultOutput = {
   results: Rec[];
 }
 
-type InfiniteQueryOutput = {
-  pageParams: SetStateAction<number>;
-  pages: RecResultOutput[];
-}
-
 type FindRecsResultOutput = {
   current: number;
   next: number | undefined;
   pages: number;
-  result: FindQuery[];
-}
-
-type FindRecsInfiniteQueryOutput = {
-  pageParams: SetStateAction<number>;
-  pages: FindRecsResultOutput[];
+  results: FindQuery[];
 }
 
 export const publicApi = createApi({
   reducerPath: "publicApi",
   baseQuery: fetchBaseQuery({ baseUrl: "https://almondluu.pythonanywhere.com/v1/public/" }),
   endpoints: (builder) => ({
-    getRecs: builder.infiniteQuery<InfiniteQueryOutput, { username: string, uid: string, query: string }, number>({
+    getRecs: builder.infiniteQuery<RecResultOutput, { username: string, uid: string, query: string }, number>({
       infiniteQueryOptions: {
         initialPageParam: 1,
         getNextPageParam: (
@@ -45,7 +35,7 @@ export const publicApi = createApi({
         return `/user/${queryArg.username}/collections/${queryArg.uid}/recs?${queryArg.query ? `query=${queryArg.query}&` : ""}page=${pageParam || 1}`
       }
     }),
-    getFindRecs: builder.infiniteQuery<FindRecsInfiniteQueryOutput, { query: string, type: string, tags?: string }, number>({
+    getFindRecs: builder.infiniteQuery<FindRecsResultOutput, { query: string, type: string, tags?: string }, number>({
           infiniteQueryOptions: {
             initialPageParam: 1,
             getNextPageParam: (

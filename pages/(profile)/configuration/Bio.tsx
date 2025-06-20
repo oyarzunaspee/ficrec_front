@@ -1,29 +1,32 @@
+import { useForm, useWatch, Control } from "react-hook-form";
+
 import CardHead from "../../../components/CardHead";
 import CardFooter from "../../../components/CardFooter";
 import FormGroup from "../../../components/FormGroup.js";
-import { useForm, useWatch, Control } from "react-hook-form";
-import { useUpdateProfileMutation } from "../../../store/api/profile";
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid";
-import { CheckCircleIcon } from "@heroicons/react/24/solid";
-import { updateHighlight } from "../../../store/slices/highlight";
+
 import { useAppDispatch } from "../../../store/hooks";
+import { updateHighlight } from "../../../store/slices/highlight";
 import { dispatchResult } from "../../../utils/dispatchResult";
 
+import type { User } from "../../../utils/types";
+
+import { useUpdateProfileMutation } from "../../../store/api/profile";
+import { ChevronDownIcon, ChevronUpIcon, CheckCircleIcon } from "@heroicons/react/24/solid";
 
 
 type FormValues = {
-    highlight?: string;
+    highlight: string;
     avatarFile?: File | null;
-    bio?: string;
-    avatar?: string;
+    bio: string | undefined;
+    avatar: string | undefined;
 }
 
 type BioProps = {
     open: number;
     setOpen: Function;
-    highlight?: string;
-    avatar?: string;
-    bio?: string;
+    highlight: string;
+    avatar: string | undefined;
+    bio: string | undefined;
 }
 
 const Bio = ({ open, setOpen, highlight, avatar, bio }: BioProps) => {
@@ -44,10 +47,11 @@ const Bio = ({ open, setOpen, highlight, avatar, bio }: BioProps) => {
     })
 
 
-    const [updateProfile, result] = useUpdateProfileMutation();
+    const [useUpdateProfile, result] = useUpdateProfileMutation();
 
-    const submitBio = handleSubmit((data: FormValues) => {
-        updateProfile(data)
+    const performUpdateProfile = handleSubmit((data: FormValues) => {
+        const body: Partial<User> = {highlight: data.highlight, bio: data.bio, avatar: data.avatar}
+        useUpdateProfile(body)
             .unwrap()
             .then(() => {
                 dispatch(updateHighlight(data.highlight));
@@ -65,7 +69,7 @@ const Bio = ({ open, setOpen, highlight, avatar, bio }: BioProps) => {
         const reader = new FileReader()
         reader.readAsDataURL(e.target.files[0])
         reader.onloadend = () => {
-            setValue("avatar", reader.result);
+            setValue("avatar", reader.result as string);
         };
     }
 
@@ -89,7 +93,7 @@ const Bio = ({ open, setOpen, highlight, avatar, bio }: BioProps) => {
                     CornerIcon={open == 1 ? ChevronUpIcon : ChevronDownIcon}
                 />
                 <div className="card-body accordeon transition-height peer-checked:max-h-900">
-                    <form onSubmit={submitBio}>
+                    <form onSubmit={performUpdateProfile}>
                         <div className="content">
                             <div className="form-group">
                                 <HighlightRender control={control} highlightValue={highlight} setValue={setValue} />
@@ -121,7 +125,7 @@ const Bio = ({ open, setOpen, highlight, avatar, bio }: BioProps) => {
     )
 }
 
-const HighlightRender = ({ control, highlightValue, setValue }: { control: Control<FormValues>, highlightValue?: string, setValue: Function }) => {
+const HighlightRender = ({ control, highlightValue, setValue }: { control: Control<FormValues>, highlightValue: string, setValue: Function }) => {
     const highlight = useWatch({
         control,
         name: "highlight",
@@ -140,11 +144,11 @@ const HighlightRender = ({ control, highlightValue, setValue }: { control: Contr
                 {colors.slice(0, 4).map((color) => {
                     return (
                         <div key={`key-${color}`}
-                            onClick={() => setValue("highlight", color.match(/^bg-highlight-([\w]+)$/)[1])}
+                            onClick={() => setValue("highlight", color.match(/^bg-highlight-([\w]+)$/)?.[1] ?? "")}
                             className={`${color} rounded-full p-3 mb-1 mr-1 cursor-pointer`}
                         >
                             <CheckCircleIcon className={`size-6
-                            ${highlight == color.match(/^bg-highlight-([\w]+)$/)[1] ? "text-white" : "text-transparent"}
+                            ${highlight == color.match(/^bg-highlight-([\w]+)$/)?.[1] ? "text-white" : "text-transparent"}
                             `} />
                         </div>
                     )
@@ -155,11 +159,11 @@ const HighlightRender = ({ control, highlightValue, setValue }: { control: Contr
                 {colors.slice(-4).map((color) => {
                     return (
                         <div key={`key-${color}`}
-                            onClick={() => setValue("highlight", color.match(/^bg-highlight-([\w]+)$/)[1])}
+                            onClick={() => setValue("highlight", color.match(/^bg-highlight-([\w]+)$/)?.[1] ?? "")}
                             className={`${color} rounded-full p-3 mb-1 mr-1 cursor-pointer`}
                         >
                             <CheckCircleIcon className={`size-6
-                            ${highlight == color.match(/^bg-highlight-([\w]+)$/)[1] ? "text-white" : "text-transparent"}
+                            ${highlight == color.match(/^bg-highlight-([\w]+)$/)?.[1] ? "text-white" : "text-transparent"}
                             `} />
                         </div>
                     )

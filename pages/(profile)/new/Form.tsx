@@ -1,12 +1,14 @@
+import { useEffect, useState } from "react";
+import { useForm, Resolver } from "react-hook-form";
+import { navigate } from "vike/client/router";
+
 import FormGroup from "../../../components/FormGroup";
 import CardFooter from "../../../components/CardFooter";
-import { useForm, Resolver } from "react-hook-form";
-import { useNewCollectionMutation } from "../../../store/api/profile";
-import { navigate } from "vike/client/router";
+
 import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { useNewCollectionMutation } from "../../../store/api/profile";
 import { close } from "../../../store/slices/popup";
 import { dispatchResult } from "../../../utils/dispatchResult";
-import { useEffect, useState } from "react";
 
 type FormValues = {
     name: string;
@@ -33,16 +35,17 @@ const resolver: Resolver<FormValues> = async (values) => {
 const NewForm = () => {
     const dispatch = useAppDispatch();
 
-    const [uid, setUid] = useState("")
+    const [uid, setUid] = useState<string>("")
+    
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm<FormValues>({ resolver })
 
-    const [newCollection, result] = useNewCollectionMutation();
-    const onSubmitNewCollection = (data: FormValues) => {
-        newCollection(data)
+    const [useNewCollection, result] = useNewCollectionMutation();
+    const performNewCollection = async (data: FormValues) => {
+        await useNewCollection(data)
             .unwrap()
             .then((data) => {
                 setUid(data.uid)
@@ -65,7 +68,7 @@ const NewForm = () => {
 
     return (
         <>
-            <form onSubmit={handleSubmit(onSubmitNewCollection)}>
+            <form onSubmit={handleSubmit(performNewCollection)}>
                 <div className="content">
                     <FormGroup
                         name="name"

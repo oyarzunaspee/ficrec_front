@@ -1,14 +1,9 @@
-import { useData } from "vike-react/useData";
-import { navigate } from "vike/client/router";
-import { withFallback } from "vike-react-query";
-import { useEffect } from "react";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { get } from "react-hook-form";
-import { refreshToken } from "../../../store/slices/token";
-import { useOutsideClick } from "../../../utils/outsideClick";
-import { close } from "../../../store/slices/popup";
 import Form from "../new/Form";
 import Popup from "../../../components/Popup";
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { close } from "../../../store/slices/popup";
+import { useOutsideClick } from "../../../utils/outsideClick";
 
 
 export default function Page() {

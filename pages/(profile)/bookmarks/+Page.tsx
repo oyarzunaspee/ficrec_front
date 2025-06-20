@@ -1,23 +1,27 @@
-import { useGetSavedInfiniteQuery } from "../../../store/api/profile";
 import { useState, useEffect, useMemo, ChangeEventHandler } from "react";
-import { useAppDispatch, useAppSelector, useMediaQuery } from "../../../store/hooks";
-import { updateQuery } from "../../../store/slices/query";
+
 import type { Saved } from "../../../utils/types";
-import useColor from "../../../utils/colors";
+
 import IndividualSaved from "./Saved";
-import { activeTab } from "../../../store/slices/savedTab";
 import Loading from "../../../components/Loading";
 
-const Bookmarks = () => {
+
+import { useAppDispatch, useAppSelector } from "../../../store/hooks";
+import { useGetSavedInfiniteQuery } from "../../../store/api/profile";
+import { updateQuery } from "../../../store/slices/query";
+import { activeTab } from "../../../store/slices/savedTab";
+import { useMediaQuery } from "../../../utils/mediaQuery";
+import useColor from "../../../utils/colors";
+
+const Page = () => {
     const dispatch = useAppDispatch()
-    const query = useAppSelector((state) => state.query.value);
-
-    const savedTab = useAppSelector((state) => state.savedTab.value)
-
     const isLG = useMediaQuery()
 
+    const query = useAppSelector((state) => state.query.value);
+    const savedTab = useAppSelector((state) => state.savedTab.value)
+
     const [total, setTotal] = useState<number>(0);
-    const [currentPage, setCurrentPage] = useState(0);
+    const [currentPage, setCurrentPage] = useState<number>(0);
 
     const useQueryResult = useGetSavedInfiniteQuery({ query: query })
     const { data, isFetching, fetchNextPage, refetch } = useQueryResult
@@ -34,7 +38,8 @@ const Bookmarks = () => {
                 setCurrentPage(lastPageParam);
             }
             if (data.pages.length > 0) {
-                setTotal(data.pages[0].pages);
+                const firstPage = data.pages[0]
+                setTotal(firstPage.pages);
             }
 
         }
@@ -120,4 +125,4 @@ const RadioType = ({ checkedValue, name, setChange }: { checkedValue: boolean, n
     )
 }
 
-export default Bookmarks;
+export default Page;

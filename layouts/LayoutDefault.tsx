@@ -1,34 +1,30 @@
-import "./style.css";
-
-import "./tailwind.css";
-
+import { useEffect } from "react";
 import { navigate } from "vike/client/router";
-import { useGetUserQuery } from "../store/api/profile";
-import { useEffect, useState } from "react";
-import { useAppDispatch, useAppSelector } from "../store/hooks";
 import { usePageContext } from "vike-react/usePageContext";
-import Nav from "./components/Nav";
+
 import Bio from "./components/Bio";
-import Tabs from "./components/Tabs";
 import ColletionList from "./components/CollectionList";
-import { useMediaQuery } from "../store/hooks";
+import Nav from "./components/Nav";
 import NewButton from "./components/NewButton";
 import ScrollButton from "./components/ScrollButton";
-import { updateHighlight } from "../store/slices/highlight";
+import Tabs from "./components/Tabs";
 import ResultMessage from "./components/ResultMessage";
 
+import "./style.css";
 
-export default function LayoutDefault({ children }: { children: React.ReactNode }) {
+import { useAppDispatch, useAppSelector } from "../store/hooks";
+import { useMediaQuery } from "../utils/mediaQuery";
+import { useGetUserQuery } from "../store/api/profile";
+import { updateHighlight } from "../store/slices/highlight";
+
+
+const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
-
-  const context = usePageContext();
-
-
-  const token = useAppSelector((state) => state.token.value);
+  const { urlParsed } = usePageContext();
+  const isLG = useMediaQuery();
 
   const { data, error, isLoading } = useGetUserQuery();
 
-  const isLG = useMediaQuery();
 
   useEffect(() => {
     if (error) {
@@ -38,7 +34,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
   }, [error])
 
   useEffect(() => {
-    if (data) {
+    if (data && data.highlight != undefined) {
       dispatch(updateHighlight(data.highlight))
     }
   }, [data])
@@ -61,7 +57,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
             ">
               <Nav />
               <Bio username={data.username} bio={data.bio} avatar={data.avatar} />
-              {(["/", "/bookmarks"].includes(context.urlParsed.pathname) || isLG) &&
+              {(["/", "/bookmarks"].includes(urlParsed.pathname) || isLG) &&
                 <Tabs />
               }
               <div className="lg:overflow-y-scroll lg:flex-1">
@@ -74,7 +70,7 @@ export default function LayoutDefault({ children }: { children: React.ReactNode 
             <div className="lg:flex lg:justify-center">
               <div className="lg:basis-2/3">
                 <div className="p-5 lg:mt-5">
-                  {!isLG && context.urlParsed.pathname == "/" &&
+                  {!isLG && urlParsed.pathname == "/" &&
                     <>
                       <CollectionListMobile collections={data.collections} />
                     </>
@@ -105,12 +101,12 @@ type CollectionData = {
 }
 
 const CollectionListMobile = ({ collections }: { collections: Array<CollectionData> }) => {
-  const context = usePageContext()
+  const { urlParsed } = usePageContext()
   const privacyTab = useAppSelector((state) => state.privacyTab.value);
 
   return (
     <>
-      {context.urlParsed.pathname != "/bookmarks" &&
+      {urlParsed.pathname != "/bookmarks" &&
         <section className="px-5 pb-5">
           {collections.map((col) => {
             if (col.private == privacyTab) {
@@ -135,3 +131,5 @@ const CollectionListMobile = ({ collections }: { collections: Array<CollectionDa
     </>
   )
 }
+
+export default LayoutDefault;

@@ -1,15 +1,15 @@
 import { useEffect } from "react";
+
 import { useAppSelector, useAppDispatch } from "../../store/hooks";
-import { SparklesIcon, NoSymbolIcon } from "@heroicons/react/24/solid";
 import { resetResultMessage, initResetResultMessage } from "../../store/slices/resultMessage";
 import useColor from "../../utils/colors";
 
+import { SparklesIcon, NoSymbolIcon } from "@heroicons/react/24/solid";
+
 const ResultMessage = () => {
     const dispatch = useAppDispatch();
-
     const highlight = useColor()
 
-    
     const result = useAppSelector((state) => state.resultMessage.value)
 
     // const result = {

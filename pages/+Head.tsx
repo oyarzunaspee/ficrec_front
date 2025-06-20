@@ -1,6 +1,6 @@
 // https://vike.dev/Head
 
-import logoUrl from "../assets/logo.svg";
+import logoUrl from "../assets/ao3.png";
 
 export default function HeadDefault() {
   return (

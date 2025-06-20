@@ -1,6 +1,8 @@
-import { IconTag } from "./types";
 import { MouseEventHandler, RefObject } from "react";
-import { useMediaQuery } from "../store/hooks";
+
+import { IconTag } from "./types";
+
+import { useMediaQuery } from "../utils/mediaQuery";
 
 type Items = {
     title: string;
@@ -9,7 +11,7 @@ type Items = {
 }
 
 const Dropdown = ({ right, top, ref, open, items }: { right?: string, top?: string, ref: RefObject<HTMLDivElement | null>, open: boolean, items: Array<Items> }) => {
-    const isLG = useMediaQuery("(min-width: 1024px)");
+    const isLG = useMediaQuery();
 
     return (
         <>

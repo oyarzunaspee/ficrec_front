@@ -1,12 +1,13 @@
-import { ArrowUpCircleIcon } from "@heroicons/react/24/solid";
 import { useEffect, useState } from "react";
-import { useAppSelector } from "../../store/hooks";
+
 import useColor from "../../utils/colors";
+
+import { ArrowUpCircleIcon } from "@heroicons/react/24/solid";
 
 const ScrollButton = ({highlight} : {highlight?: string}) => {
     const userHighlight = useColor()
 
-    const [scroll, setScroll] = useState(false);
+    const [scroll, setScroll] = useState<boolean>(false);
 
     const handleVisibleButton = () => {
         const position = window.pageYOffset;

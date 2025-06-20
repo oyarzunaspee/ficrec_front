@@ -1,10 +1,12 @@
-import "../../../layouts/style.css";
-import { useData } from "vike-react/useData";
-import { Data } from "./+data";
 import { navigate } from "vike/client/router";
+import { useData } from "vike-react/useData";
+
+import { Data } from "./+data";
 import Bio from "../components/Bio";
 
-const Profile = () => {
+import "../../../layouts/style.css";
+
+const Page = () => {
     const user = useData<Data>();
 
     return (
@@ -39,4 +41,4 @@ const Profile = () => {
     )
 }
 
-export default Profile;
+export default Page;

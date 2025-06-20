@@ -27,7 +27,6 @@ function CardHead({ onClick, title, subTitle, cornerClick, corner, CornerIcon }:
                     }
                 </div>
                 {CornerIcon &&
-
                     <div
                         onClick={cornerClick}
                         className={`corner 
@@ -38,7 +37,6 @@ function CardHead({ onClick, title, subTitle, cornerClick, corner, CornerIcon }:
             </div>
         </>
     )
-
 }
 
 export default CardHead;

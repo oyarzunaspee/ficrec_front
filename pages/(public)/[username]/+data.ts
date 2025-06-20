@@ -1,6 +1,7 @@
+import { useConfig } from "vike-react/useConfig";
+
 import type { PageContextServer } from "vike/types";
 import type { User } from "../../../utils/types";
-import { useConfig } from "vike-react/useConfig";
 
 export type Data = Awaited<ReturnType<typeof data>>;
 

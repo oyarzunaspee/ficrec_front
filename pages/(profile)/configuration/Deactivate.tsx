@@ -1,10 +1,13 @@
-import CardHead from "../../../components/CardHead"
-import FormGroup from "../../../components/FormGroup"
-import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid"
 import { useForm } from "react-hook-form";
-import { useDeactivateUserMutation } from "../../../store/api/user";
 import { navigate } from "vike/client/router";
+
+import CardHead from "../../../components/CardHead";
+import FormGroup from "../../../components/FormGroup";
+
+import { useDeactivateUserMutation } from "../../../store/api/user";
 import { dispatchResult } from "../../../utils/dispatchResult";
+
+import { ChevronDownIcon, ChevronUpIcon } from "@heroicons/react/24/solid"
 
 type FormValues = {
     password: string;
@@ -18,9 +21,9 @@ const Deactivate = ({ open, setOpen }: { open: number, setOpen: Function }) => {
         formState: { errors },
     } = useForm<FormValues>()
 
-    const [changeUsername, result] = useDeactivateUserMutation();
-    const submitDeactivate = handleSubmit((data: FormValues) => {
-        changeUsername(data)
+    const [useDeactivateUser, result] = useDeactivateUserMutation();
+    const performDeactivateUser = handleSubmit((data: FormValues) => {
+        useDeactivateUser(data)
             .unwrap()
             .then(() => {
                 navigate("/login");
@@ -52,7 +55,7 @@ const Deactivate = ({ open, setOpen }: { open: number, setOpen: Function }) => {
                     CornerIcon={open == 4 ? ChevronUpIcon : ChevronDownIcon}
                 />
                 <div className="card-body accordeon transition-height">
-                    <form onSubmit={submitDeactivate}>
+                    <form onSubmit={performDeactivateUser}>
                         <div className="content">
                             <FormGroup
                                 register={register("password", { required: true })}

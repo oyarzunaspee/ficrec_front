@@ -1,11 +1,11 @@
+import { useConfig } from "vike-react/useConfig";
+
 import type { PageContextServer } from "vike/types";
 import type { PublicCollection } from "../../../utils/types";
-import { useConfig } from "vike-react/useConfig";
 
 export type Data = Awaited<ReturnType<typeof data>>;
 
 export const data = async (pageContext: PageContextServer) => {
-  // https://vike.dev/useConfig
   const config = useConfig();
 
   const param = pageContext.urlPathname.match(/^\/@([\w|\d]+)\/([\w|\d|-]+)/)

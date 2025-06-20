@@ -1,9 +1,11 @@
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
 import { MouseEventHandler } from "react";
-import { useAppSelector } from "../store/hooks";
-import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
 import { SerializedError } from "@reduxjs/toolkit";
+import { FetchBaseQueryError } from "@reduxjs/toolkit/query";
+
+import { useAppSelector } from "../store/hooks";
 import useColor from "../utils/colors";
+
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
 
 type CardFooterProps = {
     onClick?: MouseEventHandler<HTMLButtonElement>;
@@ -14,8 +16,9 @@ type CardFooterProps = {
 }
 
 function CardFooter({ onClick, error, isLoading, button, disabled }: CardFooterProps) {
-    const userHighlight = useAppSelector((state) => state.highlight.value);
     const highlight = useColor()
+    
+    const userHighlight = useAppSelector((state) => state.highlight.value);
 
     return (
         <>

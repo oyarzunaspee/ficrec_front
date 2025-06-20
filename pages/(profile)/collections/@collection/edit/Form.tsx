@@ -1,35 +1,34 @@
+import { useEffect } from "react";
+import { usePageContext } from "vike-react/usePageContext";
+import { navigate } from "vike/client/router";
+
 import FormGroup from "../../../../../components/FormGroup";
 import CardFooter from "../../../../../components/CardFooter";
+
+import type { Collection } from "../../../../../utils/types";
+
 import { useForm, Resolver, useWatch, Control } from "react-hook-form";
 import { useEditCollectionMutation } from "../../../../../store/api/profile";
 import { dispatchResult } from "../../../../../utils/dispatchResult";
-import { useEffect } from "react";
-import { useMediaQuery } from "../../../../../store/hooks";
-import { navigate } from "vike/client/router";
-import { usePageContext } from "vike-react/usePageContext";
+import { useMediaQuery } from "../../../../../utils/mediaQuery";
 
-type FormValues = {
-    name: string;
-    private: boolean;
-    about?: string | void;
-}
 
 type FormProps = {
     name: string;
     uid: string;
     privacy: boolean;
-    about?: string | void;
+    about?: string | undefined;
     setOpen?: Function;
 }
 const Form = ({ name, uid, privacy, about, setOpen }: FormProps) => {
-    const context = usePageContext();
+    const { routeParams } = usePageContext();
     const isLG = useMediaQuery();
 
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<FormValues>({
+    } = useForm<Partial<Collection>>({
         defaultValues: {
             name: name,
             private: privacy,
@@ -37,10 +36,10 @@ const Form = ({ name, uid, privacy, about, setOpen }: FormProps) => {
         }
     })
 
-    const [updateCollection, result] = useEditCollectionMutation();
+    const [useEditCollection, result] = useEditCollectionMutation();
 
-    const submitEditCollection = handleSubmit((data: FormValues) => {
-        updateCollection({ uid, data })
+    const performEditCollection = handleSubmit((data: Partial<Collection>) => {
+        useEditCollection({ uid, data })
             .unwrap()
             .then()
     })
@@ -51,7 +50,7 @@ const Form = ({ name, uid, privacy, about, setOpen }: FormProps) => {
         }
 
         if (result.isSuccess && !isLG) {
-            navigate(context.routeParams.collection ? `/collections/${context.routeParams.collection}` : "/");
+            navigate(routeParams.collection ? `/collections/${routeParams.collection}` : "/");
         }
     }, [result.isSuccess])
 
@@ -66,26 +65,26 @@ const Form = ({ name, uid, privacy, about, setOpen }: FormProps) => {
 
     return (
         <>
-            <form onSubmit={submitEditCollection}>
+            <form onSubmit={performEditCollection}>
                 <div className="content">
                     <FormGroup
                         name="name"
                         label="Name"
                         type="text"
-                        errors={errors}
+                        errors={errors.name?.message}
                         register={register("name")}
                     />
                     <FormGroup
                         name="private"
                         label="Private"
-                        errors={errors}
+                        errors={errors.private?.message}
                         type="check"
                         register={register("private")}
                     />
                     <FormGroup
                         name="about"
                         label="About"
-                        errors={errors}
+                        errors={errors.about?.message}
                         type="textarea"
                         register={register("about")}
                     />

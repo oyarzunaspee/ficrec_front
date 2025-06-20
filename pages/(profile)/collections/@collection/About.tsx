@@ -1,30 +1,30 @@
-import { useDeleteCollectionMutation, useGetCollectionQuery } from "../../../../store/api/profile";
-import { usePageContext } from "vike-react/usePageContext";
 import { useState, useEffect } from "react";
+import { usePageContext } from "vike-react/usePageContext";
+import { navigate } from "vike/client/router";
+
+import Loading from "../../../../components/Loading";
+import Dropdown from "../../../../components/Dropdown";
+import Form from "./edit/Form";
+import Popup from "../../../../components/Popup";
+import CardFooter from "../../../../components/CardFooter";
+
+import { useDeleteCollectionMutation, useGetCollectionQuery } from "../../../../store/api/profile";
+import { useAppDispatch } from "../../../../store/hooks";
+import { initDisplay } from "../../../../store/slices/collectionDisplay";
+import { useOutsideClick } from "../../../../utils/outsideClick";
+import { dispatchResult } from "../../../../utils/dispatchResult";
+import { useMediaQuery } from "../../../../utils/mediaQuery";
+import useColor from "../../../../utils/colors";
+
 import { EllipsisVerticalIcon, XCircleIcon, LockOpenIcon, LockClosedIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
 import { ClipboardDocumentIcon, TrashIcon } from "@heroicons/react/24/outline";
-import { useAppDispatch } from "../../../../store/hooks";
-import { useMediaQuery } from "../../../../store/hooks";
-import { navigate } from "vike/client/router";
-import Dropdown from "../../../../components/Dropdown";
-import { useOutsideClick } from "../../../../utils/outsideClick";
-import Form from "./edit/Form";
-import CardFooter from "../../../../components/CardFooter";
-import { initDisplay } from "../../../../store/slices/collectionDisplay";
-import Popup from "../../../../components/Popup";
-import { dispatchResult } from "../../../../utils/dispatchResult";
-import useColor from "../../../../utils/colors";
-import Loading from "../../../../components/Loading";
-
 
 const About = () => {
     const dispatch = useAppDispatch();
-    const context = usePageContext();
-
-
+    const { routeParams } = usePageContext();
     const highlight = useColor()
 
-    const { data, error, isLoading } = useGetCollectionQuery(context.routeParams.collection);
+    const { data, error, isLoading } = useGetCollectionQuery(routeParams.collection);
 
     useEffect(() => {
         if (data) {
@@ -33,9 +33,9 @@ const About = () => {
 
     }, [data])
 
-    const [editCollection, setEditCollection] = useState(false);
-    const [deleteCollection, setDeleteCollection] = useState(false);
-    const [dropdown, setDropdown] = useState(false);
+    const [editCollection, setEditCollection] = useState<boolean>(false);
+    const [deleteCollection, setDeleteCollection] = useState<boolean>(false);
+    const [dropdown, setDropdown] = useState<boolean>(false);
 
     if (!data) return null;
 
@@ -76,7 +76,7 @@ const About = () => {
 
                         <Menu
                             dropdown={dropdown}
-                            collection={context.routeParams.collection}
+                            collection={routeParams.collection}
                             setDropdown={setDropdown}
                             setEditCollection={setEditCollection}
                             setDeleteCollection={setDeleteCollection}
@@ -118,7 +118,7 @@ const About = () => {
                 setEditCollection={setEditCollection}
                 editCollection={editCollection}
                 name={data.name}
-                uid={context.routeParams.collection}
+                uid={routeParams.collection}
                 privacy={data.private}
                 about={data.about}
             />
@@ -144,9 +144,9 @@ type MenuProps = {
 }
 
 const Menu = ({ dropdown, collection, setDropdown, setEditCollection, setDeleteCollection }: MenuProps) => {
-    const context = usePageContext();
+    const { routeParams } = usePageContext();
 
-    const [copied, setCopied] = useState(false);
+    const [copied, setCopied] = useState<boolean>(false);
 
     dispatchResult({
         type: "Link",
@@ -178,7 +178,7 @@ const Menu = ({ dropdown, collection, setDropdown, setEditCollection, setDeleteC
                 if (isLG) {
                     await setEditCollection(true);
                 } else {
-                    navigate(`/${context.routeParams.collection}/edit`);
+                    navigate(`/${routeParams.collection}/edit`);
                 }
                 setDropdown(false);
             }
@@ -211,7 +211,7 @@ type EditPopupProps = {
     name: string;
     uid: string;
     privacy: boolean;
-    about?: string | void;
+    about?: string | undefined;
 }
 
 const EditPopup = ({ setEditCollection, editCollection, name, uid, privacy, about }: EditPopupProps) => {
@@ -243,13 +243,13 @@ const EditPopup = ({ setEditCollection, editCollection, name, uid, privacy, abou
 }
 
 const DeleteCollection = ({ deleteCollection, setDeleteCollection, name }: { deleteCollection: boolean, setDeleteCollection: Function, name: string }) => {
-    const context = usePageContext();
+    const { routeParams } = usePageContext();
     const isLG = useMediaQuery();
 
-    const [performDelete, result] = useDeleteCollectionMutation();
+    const [useDeleteCollection, result] = useDeleteCollectionMutation();
 
-    const submitDelete = () => {
-        performDelete(context.routeParams.collection)
+    const performDeleteCollection = async () => {
+        await useDeleteCollection(routeParams.collection)
             .unwrap()
             .then(() => navigate("/"))
     }
@@ -277,7 +277,7 @@ const DeleteCollection = ({ deleteCollection, setDeleteCollection, name }: { del
             </div>
             <CardFooter
                 error={result.error}
-                onClick={submitDelete}
+                onClick={performDeleteCollection}
                 isLoading={result.isLoading}
                 button="DELETE"
             />
@@ -306,7 +306,7 @@ const DeleteCollection = ({ deleteCollection, setDeleteCollection, name }: { del
                 ${deleteCollection ? "max-h-50" : "max-h-0"}
                 `}>
                     <CardFooter
-                        onClick={submitDelete}
+                        onClick={performDeleteCollection}
                         error={result.error}
                         isLoading={result.isLoading}
                         button="DELETE"

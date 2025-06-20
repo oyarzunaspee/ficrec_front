@@ -1,14 +1,16 @@
-import { useAppDispatch, useAppSelector, useMediaQuery } from "../../store/hooks";
+import { useEffect } from "react";
+import { usePageContext } from "vike-react/usePageContext";
+
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { activeTab } from "../../store/slices/privacyTab";
 import { activeTab as savedActiveTab } from "../../store/slices/savedTab";
-import { usePageContext } from "vike-react/usePageContext";
-import { useEffect } from "react";
 import useColor from "../../utils/colors";
+import { useMediaQuery } from "../../utils/mediaQuery";
 
 
 const Tabs = () => {
     const dispatch = useAppDispatch()
-    const context = usePageContext()
+    const { urlParsed } = usePageContext()
     const isLG = useMediaQuery()
 
     const savedTab = useAppSelector((state) => state.savedTab.value);
@@ -22,7 +24,7 @@ const Tabs = () => {
         <>
             <div className="text-md w-full mt-2 px-5 bg-white font-medium text-center">
                 <ul className="flex justify-center">
-                    {(context.urlParsed.pathname == "/bookmarks" && !isLG) ?
+                    {(urlParsed.pathname == "/bookmarks" && !isLG) ?
                         <TabBase names={["Unread", "Read"]} active={savedTab} changeTab={savedActiveTab} />
                         :
                         <TabBase names={["Public", "Private"]} active={privacyTab} changeTab={activeTab} />
@@ -35,7 +37,7 @@ const Tabs = () => {
 }
 
 
-const TabBase = ({ names, active, changeTab }: { names: string[], active: boolean, changeTab: Function }) => {
+const TabBase = ({ names, active, changeTab }: { names: string[], active: boolean | null, changeTab: Function }) => {
     const dispatch = useAppDispatch()
     
     const highlight = useColor()

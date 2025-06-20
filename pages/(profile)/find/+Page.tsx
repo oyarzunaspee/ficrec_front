@@ -1,10 +1,15 @@
 import { useState, useEffect } from "react";
-import useColor from "../../../utils/colors";
-import { useAppDispatch, useAppSelector } from "../../../store/hooks";
-import { useGetFindRecsInfiniteQuery } from "../../../store/api/public";
-import type { FindQuery } from "../../../utils/types";
-import { ChevronDoubleRightIcon } from "@heroicons/react/24/solid";
+
 import Loading from "../../../components/Loading";
+
+import type { FindQuery } from "../../../utils/types";
+
+import { useAppSelector } from "../../../store/hooks";
+import { useGetFindRecsInfiniteQuery } from "../../../store/api/public";
+import useColor from "../../../utils/colors";
+import { useInfiniteScroll } from "../../../utils/infiniteScroll";
+
+import { ChevronDoubleRightIcon } from "@heroicons/react/24/solid";
 
 const Page = () => {
     const userHighlight = useAppSelector((state) => state.highlight.value)
@@ -14,8 +19,6 @@ const Page = () => {
     const [activeSearch, setActiveSearch] = useState<string>("")
     const [searchQuery, setSearchQuery] = useState<string>("")
     const [tagsSearch, setTagsSearch] = useState<string>("")
-    const [total, setTotal] = useState<number>(0);
-    const [currentPage, setCurrentPage] = useState<number>(1);
     const [disabled, setDisabled] = useState<boolean>(true);
     const [openTags, setOpenTags] = useState<boolean>(false);
 
@@ -24,37 +27,14 @@ const Page = () => {
     const useQueryResult = useGetFindRecsInfiniteQuery({ type: activeSearch, query: searchQuery, tags: tagsSearch }, { skip: skip })
     const { data, isFetching, fetchNextPage, refetch } = useQueryResult
 
-    useEffect(() => {
-        if (data) {
-            const lastPageParam = data.pageParams.at(-1);
-            if (lastPageParam !== undefined) {
-                setCurrentPage(lastPageParam);
-            }
-            if (data.pages.length > 0) {
-                setTotal(data.pages[0].pages);
-            }
-            setSkip(true)
-        }
-    }, [data])
-
-
-    const handleScroll = () => {
-        console.log("!!")
-        if ((window.innerHeight + window.pageYOffset) >= document.body.offsetHeight && !isFetching) {
-            if (currentPage < total) {
-                fetchNextPage();
-            }
-
-        }
-    }
-
-    useEffect(() => {
-        window.addEventListener('scroll', handleScroll);
-
-        return () => {
-            window.removeEventListener('scroll', handleScroll);
-        };
-    }, [data]);
+    const { total, currentPage } = useInfiniteScroll({
+        data: data,
+        isFetching: isFetching,
+        fetchNextPage: fetchNextPage,
+        refetch: refetch,
+        setSkip: setSkip,
+        skip: skip
+    })
 
     useEffect(() => {
         if (activeSearch != "" && searchQuery.length > 2) {
@@ -171,7 +151,7 @@ const Page = () => {
                     }
                     {isFetching ?
                         <Loading />
-                    :
+                        :
                         null
                     }
                 </>
@@ -212,7 +192,7 @@ const FoundCollection = ({ name, about, uid, maker, matching_recs }: FindQuery) 
                         className={`px-5 pt-5 pb-2 flex justify-between
                         ${highlight.hover} text-primary
                         `}
-                        >
+                    >
                         <span>
                             {matching_recs} recs
                         </span>
@@ -235,11 +215,11 @@ const FoundCollection = ({ name, about, uid, maker, matching_recs }: FindQuery) 
                         </h2>
                     </div>
                     {about &&
-                    <div className="mt-2">
-                        <p className="text-primary text-sm">
-                        {about}
-                        </p>
-                    </div>
+                        <div className="mt-2">
+                            <p className="text-primary text-sm">
+                                {about}
+                            </p>
+                        </div>
                     }
                 </div>
             </div>

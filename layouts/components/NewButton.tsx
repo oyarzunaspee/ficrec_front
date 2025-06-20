@@ -1,34 +1,32 @@
-import { PlusCircleIcon } from "@heroicons/react/24/solid";
-import { useAppDispatch, useAppSelector } from "../../store/hooks";
-import { useState } from "react";
 import { usePageContext } from "vike-react/usePageContext";
-import { open } from "../../store/slices/popup";
 import { navigate } from "vike/client/router";
+
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { open } from "../../store/slices/popup";
 import useColor from "../../utils/colors";
+
+import { PlusCircleIcon } from "@heroicons/react/24/solid";
 
 const NewButton = () => {
     const dispatch = useAppDispatch();
-
-    const context = usePageContext();
-    const collection = context.routeParams.collection
-    const path = context.urlParsed.pathname
-
-    const userHighlight = useAppSelector((state) => state.highlight.value)
+    const { routeParams, urlParsed} = usePageContext();
     const highlight = useColor()
 
+    const userHighlight = useAppSelector((state) => state.highlight.value)
+
     const navigateNew = () => {
-        if (path == "/") {
+        if (urlParsed.pathname == "/") {
             navigate("/new")
         } else {
             navigate("/recs/new")
         }
     }
 
-    if (path == "/" || path == `/collections/${collection}`) {
+    if (urlParsed.pathname == "/" || urlParsed.pathname == `/collections/${routeParams.collection}`) {
         return (
             <>
                 <div className="lg:block hidden">
-                    <button className="cursor-pointer" onClick={() => dispatch(open(path == "/" ? "collection" : "rec"))}>
+                    <button className="cursor-pointer" onClick={() => dispatch(open(urlParsed.pathname == "/" ? "collection" : "rec"))}>
                         <PlusCircleIcon className={`size-12 border-3 rounded-full bg-white
                                         ${userHighlight != "default" ? highlight.text + " " + highlight.border : "text-grave"}
                                         `} />

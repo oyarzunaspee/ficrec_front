@@ -1,18 +1,22 @@
-import CardFooter from "../../../../components/CardFooter";
-import { TrashIcon, PencilSquareIcon, XCircleIcon, ArrowPathIcon, EllipsisVerticalIcon } from "@heroicons/react/24/solid";
-import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
-import { useEditRecMutation, useDeleteRecMutation } from "../../../../store/api/profile";
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import parse from 'html-react-parser';
 import { usePageContext } from "vike-react/usePageContext";
-import { useOutsideClick } from "../../../../utils/outsideClick";
+
+import CardFooter from "../../../../components/CardFooter";
 import Dropdown from "../../../../components/Dropdown";
-import { useMediaQuery } from "../../../../store/hooks";
 import Popup from "../../../../components/Popup";
+
+import type { Rec } from "../../../../utils/types";
+
+import { useAppSelector } from "../../../../store/hooks";
+import { useEditRecMutation, useDeleteRecMutation } from "../../../../store/api/profile";
+import { useOutsideClick } from "../../../../utils/outsideClick";
 import { dispatchResult } from "../../../../utils/dispatchResult";
+import { useMediaQuery } from "../../../../utils/mediaQuery";
 import useColor from "../../../../utils/colors";
 
+import parse from 'html-react-parser';
+import { TrashIcon, PencilSquareIcon, XCircleIcon, ArrowPathIcon, EllipsisVerticalIcon } from "@heroicons/react/24/solid";
 
 const formatWords = (num: number) => {
     const numf = new Intl.NumberFormat();
@@ -21,47 +25,31 @@ const formatWords = (num: number) => {
     return pos != -1 ? numString.slice(0, pos) + "K" : numString
 }
 
-type RecProps = {
-    uid: string;
-    title: string;
-    author: Array<string>;
-    link: string;
-    fandom: Array<string>;
-    rating: string;
-    chapters: string;
-    words: number;
-    warnings: Array<string> | [];
-    characters: Array<string> | [];
-    ship: Array<string> | [];
-    tags: Array<string> | [];
-    summary: string | "";
-    notes: string | "";
-}
 
-
-const Rec = ({ uid, title, author, link, fandom, rating, chapters, words, warnings, characters, ship, tags, summary, notes }: RecProps) => {
-    const context = usePageContext();
+const IndividualRec = ({ uid, title, author, link, fandom, rating, chapters, words, warnings, characters, ship, tags, summary, notes }: Rec) => {
+    const { routeParams } = usePageContext();
     const highlight = useColor()
+    
     const collectionDisplay = useAppSelector((state) => state.collectionDisplay.value);
 
-    const [editRec, setEditRec] = useState(false);
-    const [deleteRec, setDeleteRec] = useState(false);
+    const [editRec, setEditRec] = useState<boolean>(false);
+    const [deleteRec, setDeleteRec] = useState<boolean>(false);
 
 
     const {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<Pick<RecProps, "notes">>({
+    } = useForm<Pick<Rec, "notes">>({
         defaultValues: {
             notes: notes
         }
     })
 
-    const [updateRec, result] = useEditRecMutation();
-    const onSubmitEditRec = (data: Pick<RecProps, "notes">) => {
-        updateRec({
-            collection: context.routeParams.collection,
+    const [useEditRec, result] = useEditRecMutation();
+    const performEditRec = async (data: Pick<Rec, "notes">) => {
+        await useEditRec({
+            collection: routeParams.collection,
             uid: uid,
             data: data
         })
@@ -84,7 +72,7 @@ const Rec = ({ uid, title, author, link, fandom, rating, chapters, words, warnin
             <div className="card">
                 <div className="card-body">
                     <div className="content border-t-0 lg:relative">
-                        <form onSubmit={handleSubmit(onSubmitEditRec)}>
+                        <form onSubmit={handleSubmit(performEditRec)}>
                             <div className="form-group">
                                 <Menu
                                     editRec={editRec}
@@ -160,7 +148,7 @@ const Rec = ({ uid, title, author, link, fandom, rating, chapters, words, warnin
                                             Fandom
                                         </td>
                                         <td>
-                                            {fandom.map((fandom) => <span key={fandom} className="list">{fandom}</span>)}
+                                            {fandom.map((fandom: string) => <span key={fandom} className="list">{fandom}</span>)}
                                         </td>
                                     </tr>
                                 }
@@ -194,7 +182,7 @@ const Rec = ({ uid, title, author, link, fandom, rating, chapters, words, warnin
                                             Warnings
                                         </td>
                                         <td>
-                                            {warnings.map((warning) => <span key={warning} className="list">{warning}</span>)}
+                                            {warnings.map((warning: string) => <span key={warning} className="list">{warning}</span>)}
                                         </td>
                                     </tr>
                                 }
@@ -204,7 +192,7 @@ const Rec = ({ uid, title, author, link, fandom, rating, chapters, words, warnin
                                             Characters
                                         </td>
                                         <td>
-                                            {characters.map((character) => <span key={character} className="list">{character}</span>)}
+                                            {characters.map((character: string) => <span key={character} className="list">{character}</span>)}
                                         </td>
                                     </tr>
                                 }
@@ -214,7 +202,7 @@ const Rec = ({ uid, title, author, link, fandom, rating, chapters, words, warnin
                                             Ships
                                         </td>
                                         <td>
-                                            {ship.map((ship) => <span key={ship} className="list">{ship}</span>)}
+                                            {ship.map((ship: string) => <span key={ship} className="list">{ship}</span>)}
                                         </td>
                                     </tr>
                                 }
@@ -224,7 +212,7 @@ const Rec = ({ uid, title, author, link, fandom, rating, chapters, words, warnin
                                             Tags
                                         </td>
                                         <td>
-                                            {tags.map((tag) => <span key={tag} className="list">{tag}</span>)}
+                                            {tags.map((tag: string) => <span key={tag} className="list">{tag}</span>)}
                                         </td>
                                     </tr>
                                 }
@@ -249,7 +237,7 @@ const Rec = ({ uid, title, author, link, fandom, rating, chapters, words, warnin
 
 const Menu = ({ editRec, setEditRec, setDeleteRec, deleteRec }: { editRec: boolean, setEditRec: Function, setDeleteRec: Function, deleteRec: boolean }) => {
 
-    const [popup, setPopup] = useState(false);
+    const [popup, setPopup] = useState<boolean>(false);
 
     const items = [
         {
@@ -324,14 +312,14 @@ const Menu = ({ editRec, setEditRec, setDeleteRec, deleteRec }: { editRec: boole
 }
 
 const Delete = ({ title, deleteRec, setDeleteRec, recTitle, uid }: { title: string, deleteRec: boolean, setDeleteRec: Function, recTitle: string, uid: string }) => {
-    const context = usePageContext();
+    const { routeParams } = usePageContext();
 
     const isLG = useMediaQuery();
 
-    const [performDelete, result] = useDeleteRecMutation();
+    const [useDeleteRec, result] = useDeleteRecMutation();
 
-    const submitDelete = () => {
-        performDelete({ collection: context.routeParams.collection, uid: uid })
+    const performDelete = async () => {
+        await useDeleteRec({ collection: routeParams.collection, uid: uid })
             .unwrap()
             .then()
     }
@@ -375,7 +363,7 @@ const Delete = ({ title, deleteRec, setDeleteRec, recTitle, uid }: { title: stri
                 :
                 <div className="lg:hidden">
                     <CardFooter
-                        onClick={submitDelete}
+                        onClick={performDelete}
                         button="DELETE"
                         error={result.error}
                         isLoading={result.isLoading}
@@ -386,4 +374,4 @@ const Delete = ({ title, deleteRec, setDeleteRec, recTitle, uid }: { title: stri
     )
 }
 
-export default Rec;
+export default IndividualRec;

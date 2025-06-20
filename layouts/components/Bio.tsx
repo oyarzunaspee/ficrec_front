@@ -1,8 +1,11 @@
-import { ChevronUpIcon, ChevronDownIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
-import { useAppDispatch, useAppSelector, useMediaQuery } from "../../store/hooks";
-import useColor from "../../utils/colors";
-import { changeNav } from "../../store/slices/nav";
 import { usePageContext } from "vike-react/usePageContext";
+
+import { useAppDispatch, useAppSelector } from "../../store/hooks";
+import { useMediaQuery } from "../../utils/mediaQuery";
+import { changeNav } from "../../store/slices/nav";
+import useColor from "../../utils/colors";
+
+import { ChevronUpIcon, ChevronDownIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
 
 type BioProps = {
     username: string;
@@ -12,12 +15,12 @@ type BioProps = {
 
 const Bio = ({ username, bio, avatar }: BioProps) => {
     const dispatch = useAppDispatch()
-    const context = usePageContext()
+    const { urlParsed } = usePageContext()
+    const isLG = useMediaQuery();
+    const highlight = useColor()
 
     const navOpen = useAppSelector((state) => state.nav.value)
 
-    const isLG = useMediaQuery();
-    const highlight = useColor()
 
     return (
         <>
@@ -55,7 +58,7 @@ const Bio = ({ username, bio, avatar }: BioProps) => {
                         <h2 className={`${highlight.text}
                         font-bold inline-block align-top `}>
                             @{username}
-                            {(navOpen || isLG) && context.urlParsed.pathname != "/configuration" &&
+                            {(navOpen || isLG) && urlParsed.pathname != "/configuration" &&
                                 <span className="
                                       lg:absolute right-5
                                       text-sm inline-block align-top ml-2">

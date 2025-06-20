@@ -1,17 +1,22 @@
+import { useEffect, useState } from "react";
+import { useForm, Control, useWatch, Resolver } from "react-hook-form";
+import { usePageContext } from "vike-react/usePageContext";
+import { navigate } from 'vike/client/router'
+
 import FormGroup from "../../../../components/FormGroup";
 import CardFooter from "../../../../components/CardFooter";
-import { useForm, Control, useWatch, Resolver } from "react-hook-form";
-import { useAddRecMutation, useGetUserQuery } from "../../../../store/api/profile";
-import { navigate } from 'vike/client/router'
-import { usePageContext } from "vike-react/usePageContext";
-import { LockClosedIcon, LockOpenIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
-import { useEffect, useState } from "react";
+
 import { UserCollection } from "../../../../utils/types";
-import { useOutsideClick } from "../../../../utils/outsideClick";
-import { useAppDispatch, useMediaQuery } from "../../../../store/hooks";
-import { dispatchResult } from "../../../../utils/dispatchResult";
+
+import { useAppDispatch } from "../../../../store/hooks";
+import { useAddRecMutation, useGetUserQuery } from "../../../../store/api/profile";
 import { close } from "../../../../store/slices/popup";
+import { dispatchResult } from "../../../../utils/dispatchResult";
+import { useOutsideClick } from "../../../../utils/outsideClick";
+import { useMediaQuery } from "../../../../utils/mediaQuery";
 import useColor from "../../../../utils/colors";
+
+import { LockClosedIcon, LockOpenIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 
 type FormValues = {
     collection: string;
@@ -36,12 +41,12 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 const Form = () => {
     const dispatch = useAppDispatch()
-    const context = usePageContext();
+    const { routeParams, previousPageContext } = usePageContext();
     const isLG = useMediaQuery();
 
-    const collectionValue = isLG ? context.routeParams.collection : context.previousPageContext?.routeParams.collection
+    const collectionValue = isLG ? routeParams.collection : previousPageContext?.routeParams.collection
 
-    const [collection, setCollection] = useState(collectionValue || "")
+    const [collection, setCollection] = useState<string>(collectionValue || "")
 
     const { data, isLoading, error } = useGetUserQuery();
 
@@ -55,10 +60,10 @@ const Form = () => {
         formState: { errors },
     } = useForm<FormValues>({ resolver })
 
-    const [addRec, result] = useAddRecMutation();
-    const onSubmitNewCollection = (data: FormValues) => {
+    const [useAddRec, result] = useAddRecMutation();
+    const performAddRec = async (data: FormValues) => {
         setCollection(data.collection)
-        addRec({
+        useAddRec({
             uid: data.collection,
             data: data
         })
@@ -89,7 +94,7 @@ const Form = () => {
     return (
         <>
 
-            <form onSubmit={handleSubmit(onSubmitNewCollection)}>
+            <form onSubmit={handleSubmit(performAddRec)}>
                 <div className="content">
                     <div className="form-group">
                         <label htmlFor="collection">
@@ -135,7 +140,7 @@ type CollectionRenderProps = {
 
 const CollectionRender = ({ control, collectionValue, collectionList, setValue }: CollectionRenderProps) => {
     const highlight = useColor()
-    const [open, setOpen] = useState(false);
+    const [open, setOpen] = useState<boolean>(false);
 
     useEffect(() => {
         setValue("collection", collectionValue);

@@ -1,13 +1,15 @@
 import { useState } from "react";
-import { useGetUserQuery } from "../../../store/api/profile";
+
 import Bio from "./Bio";
 import Deactivate from "./Deactivate";
 import Password from "./Password";
 import Username from "./Username";
 
-const Configuration = () => {
+import { useGetUserQuery } from "../../../store/api/profile";
 
-    const [open, setOpen] = useState(1);
+const Page = () => {
+
+    const [open, setOpen] = useState<number>(1);
 
     const { data, error, isLoading } = useGetUserQuery();
 
@@ -26,4 +28,4 @@ const Configuration = () => {
     )
 }
 
-export default Configuration;
+export default Page;
