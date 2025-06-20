@@ -4,6 +4,8 @@ import CardFooter from "../../components/CardFooter";
 import CardHead from "../../components/CardHead";
 import FormGroup from "../../components/FormGroup";
 
+import type { SignUpInput } from "../../utils/types";
+
 import { useSignUpMutation } from "../../store/api/auth";
 
 import { ArrowPathIcon } from "@heroicons/react/24/solid";
@@ -11,7 +13,7 @@ import { ArrowPathIcon } from "@heroicons/react/24/solid";
 type FormValues = {
     username: string;
     password: string;
-    password_check: string;
+    passwordCheck: string;
 }
 
 const resolver: Resolver<FormValues> = async (values) => {
@@ -39,14 +41,15 @@ const SignUp = () => {
     const [useSignup, result] = useSignUpMutation()
     
     const performSignup = handleSubmit((data: FormValues) => {
+        const body: SignUpInput = {username: data.username, password: data.password, password_check: data.passwordCheck}
     
-        useSignup(data)
+        useSignup(body)
             .unwrap()
             .then(() => {
                 reset({
                     username: "",
                     password: "",
-                    password_check: ""
+                    passwordCheck: ""
                 })
             })
             .catch((e) => {
@@ -88,9 +91,9 @@ const SignUp = () => {
                             <FormGroup
                                 name="confirmPassword"
                                 label="Confirm Password"
-                                errors={errors.password_check?.message}
+                                errors={errors.passwordCheck?.message}
                                 type="password"
-                                register={register("password_check", { required: true, minLength: 6 })}
+                                register={register("passwordCheck", { required: true, minLength: 6 })}
                             />
                         </div>
                         <div className="card-footer pb-5">
