@@ -22,7 +22,7 @@ const Page = () => {
                         <div className="lg:p-5 p-10 w-full">
                             <div className="flex flex-col">
                                 <div className="flex justify-center items-center mt-20 lg:mt-30">
-                                    <img src="../../assets/ao3.png" alt="" className="w-30" />
+                                    <img src="public/ao3.png" alt="" className="w-30" />
                                     <h1 className="font-mono tracking-widest text-white text-shadow-md text-[2em] font-bold">
                                         FicRec
                                     </h1>
