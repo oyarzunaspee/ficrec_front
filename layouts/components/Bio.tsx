@@ -8,6 +8,7 @@ import { changeNav } from "../../store/slices/nav";
 import useColor from "../../utils/colors";
 
 import { ChevronUpIcon, ChevronDownIcon, PencilSquareIcon } from "@heroicons/react/24/solid";
+import { useState } from "react";
 
 type BioProps = {
     username: string;
@@ -23,11 +24,15 @@ const Bio = ({ username, bio, avatar }: BioProps) => {
 
     const navOpen = useAppSelector((state) => state.nav.value)
 
+    const [showConfig, setShowConfig] = useState(false)
+
 
     return (
         <>
             <section className="px-5 py-3 lg:pb-0">
-                <div className="
+                <div 
+                onMouseOver={() => setShowConfig(true)}
+                className="
                   lg:relative
                   border-3 border-dotted border-base rounded-lg px-5 py-3 relative">
                     <input
@@ -61,9 +66,12 @@ const Bio = ({ username, bio, avatar }: BioProps) => {
                         font-bold inline-block align-top `}>
                             @{username}
                             {(navOpen || isLG) && urlParsed.pathname != "/configuration" &&
-                                <span className="
+                                <span className={`
+                                      ${showConfig ? "inline-block" : "hidden"}
                                       lg:absolute right-5
-                                      text-sm inline-block align-top ml-2">
+                                      text-sm align-top ml-2
+                                      `}
+                                >
                                     <a href="/configuration">
                                         <PencilSquareIcon className="size-5 cursor-pointer text-gray-400" />
                                     </a>
