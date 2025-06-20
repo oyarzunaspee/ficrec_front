@@ -32,6 +32,7 @@ const Bio = ({ username, bio, avatar }: BioProps) => {
             <section className="px-5 py-3 lg:pb-0">
                 <div 
                 onMouseOver={() => setShowConfig(true)}
+                onMouseOut={() => setShowConfig(false)}
                 className="
                   lg:relative
                   border-3 border-dotted border-base rounded-lg px-5 py-3 relative">
