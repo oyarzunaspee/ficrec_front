@@ -12,7 +12,7 @@ import ScrollButton from "../../../../layouts/components/ScrollButton";
 import { PublicCollection, Rec } from "../../../../utils/types";
 import type { RecResultOutput } from "../../../../store/api/public";
 
-import "../../../layouts/style.css";
+import "../../../../layouts/style.css";
 
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { useGetRecsInfiniteQuery } from "../../../../store/api/public";

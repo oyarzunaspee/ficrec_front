@@ -1,6 +1,6 @@
 import { usePageContext } from "vike-react/usePageContext";
 
-import "../../layouts/style.css"
+import "../../layouts/style.css";
 
 import { FaceFrownIcon, ArrowUturnLeftIcon } from "@heroicons/react/24/outline";
 

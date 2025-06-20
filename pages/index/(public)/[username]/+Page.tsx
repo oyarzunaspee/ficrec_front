@@ -4,7 +4,7 @@ import { useData } from "vike-react/useData";
 import { Data } from "./+data";
 import Bio from "../components/Bio";
 
-import "../../../layouts/style.css";
+import "../../../../layouts/style.css";
 
 const Page = () => {
     const user = useData<Data>();
