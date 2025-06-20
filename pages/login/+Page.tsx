@@ -32,7 +32,7 @@ const Page = () => {
                                     {logInCard ?
                                         <LogIn />
                                         :
-                                        <SignUp />
+                                        <SignUp setLogInCard={setLogInCard} />
                                     }
                                 </div>
                                 <div

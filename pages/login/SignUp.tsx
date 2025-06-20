@@ -1,5 +1,4 @@
 import { useForm, Resolver } from "react-hook-form";
-import { navigate } from "vike/client/router";
 
 import CardFooter from "../../components/CardFooter";
 import CardHead from "../../components/CardHead";
@@ -31,7 +30,7 @@ const resolver: Resolver<FormValues> = async (values) => {
     }
 }
 
-const SignUp = () => {
+const SignUp = ({setLogInCard}: {setLogInCard: Function}) => {
     const {
             register,
             handleSubmit,
@@ -59,7 +58,7 @@ const SignUp = () => {
 
         useEffect(() => {
             if (result.isSuccess) {
-                navigate("/")
+                setLogInCard(true)
             }
         }, [result.isSuccess])
 
