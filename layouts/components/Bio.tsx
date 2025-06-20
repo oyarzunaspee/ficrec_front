@@ -61,7 +61,7 @@ const Bio = ({ username, bio, avatar }: BioProps) => {
                     >
                         {urlParsed.pathname != "/configuration" ?
                             <a
-                                className={`absolute z-10 flex justify-center items-center ${showConfig ? "visible" : "invisible"}`}
+                                className={`absolute z-10 aspect-square flex justify-center items-center ${showConfig ? "visible" : "invisible"}`}
                                 href="/configuration">
                                 <WrenchScrewdriverIcon className="size-8 text-white" />
                                 <img
