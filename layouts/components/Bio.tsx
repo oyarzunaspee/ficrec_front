@@ -1,5 +1,7 @@
 import { usePageContext } from "vike-react/usePageContext";
 
+import defaultAvatar from "assets/defaultAvatar.png"
+
 import { useAppDispatch, useAppSelector } from "../../store/hooks";
 import { useMediaQuery } from "../../utils/mediaQuery";
 import { changeNav } from "../../store/slices/nav";
@@ -51,7 +53,7 @@ const Bio = ({ username, bio, avatar }: BioProps) => {
                       aspect-square bg-gray-200 inline-block w-0 peer-checked:w-23 peer-checked:mr-2 rounded-lg transition-height duration-500 ease-in-out"
                     >
                         <a href="/">
-                            <img src={avatar ? avatar : "public/defaultAvatar.jpg"} alt="" />
+                            <img src={avatar ? avatar : defaultAvatar} alt="" />
                         </a>
                     </div>
                     <div className="inline-block align-top">
