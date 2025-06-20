@@ -30,8 +30,8 @@ const Bio = ({ username, bio, avatar }: BioProps) => {
     return (
         <>
             <section className="px-5 py-3 lg:pb-0">
-                <div 
-                className="
+                <div
+                    className="
                   lg:relative
                   border-3 border-dotted border-base rounded-lg px-5 py-3 relative">
                     <input
@@ -41,7 +41,7 @@ const Bio = ({ username, bio, avatar }: BioProps) => {
                         readOnly
                     />
                     <label
-                        onClick={() =>  dispatch(changeNav(!navOpen))}
+                        onClick={() => dispatch(changeNav(!navOpen))}
                         className="
                           lg:hidden
                           right-5 absolute cursor-pointer"
@@ -52,25 +52,29 @@ const Bio = ({ username, bio, avatar }: BioProps) => {
                             <ChevronDownIcon className={`size-5  font-bold `} />
                         }
                     </label>
-                    <div 
-                    onMouseOver={() => setShowConfig(true)}
-                    onMouseOut={() => setShowConfig(false)}
-                    className="
-                      flex justify-center items-center
+                    <div
+                        onMouseOver={() => setShowConfig(true)}
+                        onMouseOut={() => setShowConfig(false)}
+                        className="
                       lg:w-23 lg:mr-2
                        inline-block w-0 peer-checked:w-23 peer-checked:mr-2 rounded-lg transition-height duration-500 ease-in-out"
                     >
-                        {urlParsed.pathname != "/configuration" &&
-                        <a 
-                        className={`absolute z-10 ${showConfig ? "visible" : "invisible"}`}
-                        href="/configuration">
-                            <WrenchScrewdriverIcon className="size-8 text-white" />
-                        </a>
+                        {urlParsed.pathname != "/configuration" ?
+                            <a
+                                className={`absolute z-10 flex justify-center items-center ${showConfig ? "visible" : "invisible"}`}
+                                href="/configuration">
+                                <WrenchScrewdriverIcon className="size-8 text-white" />
+                                <img
+                                    className={`aspect-square
+                                ${urlParsed.pathname != "/configuration" ? (showConfig ? "brightness-70" : "brightness-100") : "brightness-100"}`}
+                                    src={avatar ? avatar : defaultAvatar} alt="" />
+                            </a>
+                            :
+                            <img
+                                className={`aspect-square
+                                ${urlParsed.pathname != "/configuration" ? (showConfig ? "brightness-70" : "brightness-100") : "brightness-100"}`}
+                                src={avatar ? avatar : defaultAvatar} alt="" />
                         }
-                            <img 
-                            className={`aspect-square
-                            ${urlParsed.pathname != "/configuration" ? (showConfig ? "brightness-70" : "brightness-100") : "brightness-100"}`}
-                            src={avatar ? avatar : defaultAvatar} alt="" />
                     </div>
                     <div className="inline-block align-top">
                         <h2 className={`${highlight.text}
