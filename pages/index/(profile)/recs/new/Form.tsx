@@ -17,6 +17,7 @@ import { useMediaQuery } from "../../../../../utils/mediaQuery";
 import useColor from "../../../../../utils/colors";
 
 import { LockClosedIcon, LockOpenIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
+import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
 
 type FormValues = {
     collection: string;
@@ -43,6 +44,7 @@ const Form = () => {
     const dispatch = useAppDispatch()
     const { routeParams, previousPageContext } = usePageContext();
     const isLG = useMediaQuery();
+    const highlight = useColor()
 
     const collectionValue = isLG ? routeParams.collection : previousPageContext?.routeParams.collection
 
@@ -69,7 +71,7 @@ const Form = () => {
         })
             .unwrap()
     }
-    
+
 
     useEffect(() => {
         if (result.isSuccess && !isLG) {
@@ -110,15 +112,24 @@ const Form = () => {
                         label="Notes"
                         errors={errors.notes?.message}
                         type="textarea"
-                        register={register("notes", {required: false})}
+                        register={register("notes", { required: false })}
                     />
-                    <FormGroup
-                        name="code"
-                        label="Code"
-                        errors={errors.code?.message}
-                        type="textarea"
-                        register={register("code")}
-                    />
+                    <div className="form-group">
+                        <label htmlFor="code" className="flex">
+                            Code
+                            <a href="/example" target="_blank">
+                            <QuestionMarkCircleIcon className="size-5 ml-1 cursor-pointer" />
+                            </a>
+                            <span>
+                                {errors.code?.message}
+                            </span>
+                        </label>
+                        <textarea
+                            className={`${highlight.caret} ${highlight.focus}`}
+                            {...register("code")}
+                            name="code"
+                        ></textarea>
+                    </div>
                 </div>
                 <CardFooter
                     isLoading={result.isLoading}

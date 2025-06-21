@@ -1,5 +1,4 @@
 import { useEffect } from "react";
-import { navigate } from "vike/client/router";
 import { usePageContext } from "vike-react/usePageContext";
 
 import Bio from "./components/Bio";
