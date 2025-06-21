@@ -22,7 +22,7 @@ const ColletionList = ({ collections }: { collections: Array<CollectionData> }) 
     if (isLG) {
         return (
             <>
-                <section className="border-t ml-5 border-l border-hover">
+                <section className="border-t ml-5 border-l border-hover pb-5">
                     {collections.map((col) => {
                         if (col.private == privacyTab) {
                             return (

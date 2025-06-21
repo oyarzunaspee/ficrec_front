@@ -40,7 +40,7 @@ const Page = () => {
     if (!data) return null;
 
     return (
-        <>
+        <div className="pt-15 lg:pt-0">
             {isLG &&
                 <div className="flex py-10 justify-around">
                     <RadioType
@@ -72,7 +72,7 @@ const Page = () => {
                 :
                 null
             }
-        </>
+        </div>
     )
 }
 

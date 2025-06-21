@@ -32,7 +32,7 @@ const IndividualSaved = ({ saved }: { saved: Saved }) => {
     const [dropdown, setDropdown] = useState<boolean>(false);
 
     return (
-        <div key={saved.uid} className="card pb-7 pt-3 mb-5 relative">
+        <div key={saved.uid} className="card pb-7 pt-3 mb-5">
             <div
                 className="flex px-5 justify-end pt-1"
                 onClick={!deleteBookmark ?

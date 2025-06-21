@@ -25,14 +25,6 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
 
   const { data, error, isLoading } = useGetUserQuery();
 
-
-  useEffect(() => {
-    if (error) {
-      navigate("/login")
-
-    }
-  }, [error])
-
   useEffect(() => {
     if (data && data.highlight != undefined) {
       dispatch(updateHighlight(data.highlight))
@@ -46,7 +38,7 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
     <>
       <div className="min-h-screen bg-base">
         <div className="lg:fixed z-60">
-          <div className="bg-white lg:h-screen lg:w-70">
+          <div className="bg-white lg:h-screen lg:w-70 fixed w-full shadow">
             <div className="flex flex-col h-full">
               <div className="">
                 <Nav />
@@ -65,82 +57,16 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
         <div className="lg:ml-70">
           <div className="lg:flex lg:justify-center">
             <div className="lg:basis-2/3">
-              <div className="lg:mt-15 p-10 lg:p-0">
-                {children}
-
-              </div>
-            </div>
-          </div>
-
-        </div>
-
-
-
-        {/* <div className="lg:flex">
-          <div className="lg:basis-1/4">
-            <div className="lg:h-screen fixed w-80">
-              <div className="bg-white break-all">
-                <Nav />
-                <Bio username={data.username} bio={data.bio} avatar={data.avatar} />
-                {(["/", "/bookmarks"].includes(urlParsed.pathname) || isLG) &&
-                  <Tabs />
-                }
-              </div>
-              <div className="lg:flex-1 lg:overflow-y-scroll">
-                <div className="bg-white">
-                  <ColletionList collections={data.collections} />
-                </div>
-              </div>
-            </div>
-          </div>
-          <div className="lg:flex-1 flex justify-center">
-            <div className="basis-2/3">
-              {!isLG && urlParsed.pathname == "/" &&
-                <>
+              <div className="lg:mt-15 p-5 lg:p-0">
+              {!isLG && urlParsed.pathname == "/" ?
+                <div className="mt-70">
                   <CollectionListMobile collections={data.collections} />
-                </>
-              }
-              {children}
-            </div>
-          </div>
-        </div>
-      </div> */}
-
-        {/* <div className="bg-base min-h-screen">
-        <div className="lg:flex lg:justify- text-wrap break-all">
-          <div className="top-0 sticky w-full text-wrap break-all
-            lg:left-0 lg:h-screen lg:flex lg:mb-0 lg:w-auto lg:fixed
-            "
-          >
-            <div className="bg-white text-primary
-            lg:basis-1/4 lg:flex lg:flex-col lg:fixed lg:h-full
-            xl:basis-1/6 text-wrap break-all bg-error
-            ">
-              <div>
-                s
-              </div>
-              <Nav />
-              <Bio username={data.username} bio={data.bio} avatar={data.avatar} />
-              {(["/", "/bookmarks"].includes(urlParsed.pathname) || isLG) &&
-                <Tabs />
-              }
-              <div className="lg:overflow-y-scroll lg:flex-1">
-                <ColletionList collections={data.collections} />
-              </div>
-            </div>
-          </div>
-          <div className="lg:basis-1/3"></div>
-          <div className="lg:basis-3/4 xl:basis-2/4">
-            <div className="lg:flex lg:justify-center">
-              <div className="lg:basis-2/3">
-                <div className="p-5 lg:mt-5">
-                  {!isLG && urlParsed.pathname == "/" &&
-                    <>
-                      <CollectionListMobile collections={data.collections} />
-                    </>
-                  }
-                  {children}
                 </div>
+                :
+                <div className="mt-55 lg:mt-0">
+                {children}
+                </div>
+              }
               </div>
               <div className="fixed bottom-15 right-3 lg:right-10">
                 <NewButton />
@@ -149,7 +75,8 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
               <ResultMessage />
             </div>
           </div>
-        </div>*/}
+
+        </div> 
       </div>
     </>
   )
