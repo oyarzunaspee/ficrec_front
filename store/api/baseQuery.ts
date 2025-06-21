@@ -5,8 +5,7 @@ import { refreshToken } from "../slices/token";
 
 
 const baseQuery = fetchBaseQuery({
-  // baseUrl: "https://almondluu.pythonanywhere.com/v1/",
-  baseUrl: "/api/",
+  baseUrl: "https://almondluu.pythonanywhere.com/v1/",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).token.value;
@@ -28,11 +27,10 @@ export const baseQueryWithReauth: BaseQueryFn<
     if (refreshResult.data && typeof refreshResult.data === "object" && "token" in refreshResult.data) {
 
       api.dispatch(refreshToken(refreshResult.data.token as string));
-
-
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(refreshToken(""));
+      window?.location.replace(`/login?redirect=${window.location.pathname}`);
     }
   }
 
