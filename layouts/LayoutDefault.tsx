@@ -16,6 +16,8 @@ import { useMediaQuery } from "../utils/mediaQuery";
 import { useGetUserQuery } from "../store/api/profile";
 import { updateHighlight } from "../store/slices/highlight";
 
+import { ArrowPathIcon } from "@heroicons/react/24/solid";
+
 
 const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
   const dispatch = useAppDispatch();
@@ -30,7 +32,16 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
     }
   }, [data])
 
+  if (isLoading) {
+    return (
+      <div className="h-screen bg-base flex justify-center items-center">
+        <ArrowPathIcon className="size-10 text-hover animate-spin" />
+      </div>
+    )
+  }
+
   if (!data) return null;
+
 
 
   return (
