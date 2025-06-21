@@ -55,7 +55,7 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
         </div>
         <div className="lg:ml-70">
           <div className="lg:flex lg:justify-center">
-            <div className="lg:basis-2/3">
+            <div className="lg:basis-2/3 xl:basis-2/4">
               <div className="lg:mt-15 p-5 lg:p-0">
               {!isLG && urlParsed.pathname == "/" ?
                 <div className="mt-70">
