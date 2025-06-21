@@ -150,7 +150,7 @@ const IndividualSaved = ({ saved }: { saved: Saved }) => {
                                 {saved.maker}
                             </span>
                         </div>
-                        <div className="shrink-1">
+                        <div className="shrink-0">
                             <ChevronDoubleRightIcon className={`size-4 ${highlight.text}`} />
                         </div>
                     </a>

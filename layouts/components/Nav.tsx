@@ -6,10 +6,12 @@ import { useLogOutMutation } from "../../store/api/auth";
 import useColor from "../../utils/colors";
 
 import { HomeIcon, BookmarkIcon, MagnifyingGlassCircleIcon, ArrowUpOnSquareIcon } from "@heroicons/react/24/solid";
+import { useMediaQuery } from "../../utils/mediaQuery";
 
 const Nav = () => {
   const highlight = useColor()
   const { urlParsed } = usePageContext()
+  const isLG = useMediaQuery()
   
   const navOpen = useAppSelector((state) => state.nav.value)
 
@@ -27,7 +29,7 @@ const Nav = () => {
   return (
     <>
       <div className={`overflow-hidden transition-height duration-300 ease-in-out
-    ${navOpen ? "max-h-50" : "max-h-0"}
+    ${isLG ? "max-h-50" : (navOpen ? "max-h-50" : "max-h-0")}
     `}>
         <div className="px-5 pb-1 pt-5 flex justify-around items-center">
           <div 

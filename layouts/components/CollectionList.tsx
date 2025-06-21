@@ -29,7 +29,7 @@ const ColletionList = ({ collections }: { collections: Array<CollectionData> }) 
                                 <a key={col.uid} href={`/collections/${col.uid}`}>
                                     <div key={col.uid} className="cursor-pointer py-3 px-10 text-sm border-b rounded-none border-gray-100 hover:bg-hover">
                                         <div className="flex justify-between items-center">
-                                            <h2 className={routeParams.collection == col.uid ? highlight.text : "text-secondary"}>
+                                            <h2 className={`${routeParams.collection == col.uid ? highlight.text : "text-secondary"} text-wrap break-all mr-4`}>
                                                 {col.name}
                                             </h2>
                                             <span className={routeParams.collection == col.uid ? highlight.text : "text-primary"}>
