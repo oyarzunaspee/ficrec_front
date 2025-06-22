@@ -40,7 +40,13 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
     )
   }
 
-  if (!data) return null;
+  if (!data) {
+    return (
+      <>
+      no data
+      </>
+    )
+  }
 
 
 
