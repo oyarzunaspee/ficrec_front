@@ -24,7 +24,7 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
   const { urlParsed } = usePageContext();
   const isLG = useMediaQuery();
 
-  const { data, error, isLoading } = useGetUserQuery();
+  const { data, error, isError, isSuccess, isLoading } = useGetUserQuery();
 
   useEffect(() => {
     if (data && data.highlight != undefined) {
@@ -46,6 +46,10 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
       no data
       <br />
       {error && error?.error}
+      <br />
+      {isError ? "error" : "no error"}
+      <br />
+      {isSuccess ? "success" : "no success"}
       </>
     )
   }
