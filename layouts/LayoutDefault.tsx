@@ -44,6 +44,8 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
     return (
       <>
       no data
+      <br />
+      {error}
       </>
     )
   }
