@@ -30,7 +30,7 @@ export const baseQueryWithReauth: BaseQueryFn<
       result = await baseQuery(args, api, extraOptions);
     } else {
       api.dispatch(refreshToken(""));
-      // window?.location.replace(`/login?redirect=${window.location.pathname}`);
+      window?.location.replace(`/login?redirect=${window.location.pathname}`);
     }
   }
 
