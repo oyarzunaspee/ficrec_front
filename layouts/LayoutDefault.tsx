@@ -40,21 +40,7 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
     )
   }
 
-  if (!data) {
-    return (
-      <>
-      no data
-      <br />
-      {JSON.stringify(error)}
-      <br />
-      {isError ? "error" : "no error"}
-      <br />
-      {isSuccess ? "success" : "no success"}
-      </>
-    )
-  }
-
-
+  if (!data) return null;
 
   return (
     <>
