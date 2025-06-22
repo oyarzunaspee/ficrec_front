@@ -45,7 +45,7 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
       <>
       no data
       <br />
-      {error && error?.error}
+      {JSON.stringify(error)}
       <br />
       {isError ? "error" : "no error"}
       <br />
