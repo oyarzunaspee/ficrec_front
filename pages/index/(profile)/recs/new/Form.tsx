@@ -117,6 +117,7 @@ const Form = () => {
                             </a>
                         </label>
                         <textarea
+                            rows={4}
                             className={`${highlight.caret} ${highlight.focus}`}
                             {...register("code")}
                             name="code"

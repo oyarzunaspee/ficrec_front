@@ -77,6 +77,7 @@ export function FormGroup({ disabled, name, label, errors, type, single, registe
                         <>
                             {type == "textarea" ?
                                 <textarea
+                                    rows={4}
                                     className={`${highlight.caret} ${highlight.focus}`}
                                     {...register}
                                     disabled={disabled}

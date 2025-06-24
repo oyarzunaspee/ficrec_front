@@ -83,6 +83,7 @@ const IndividualRec = ({ uid, title, author, link, fandom, rating, chapters, wor
                                 {editRec ?
                                     <>
                                         <textarea
+                                            rows={4}
                                             {...register("notes", { required: false })}
                                             className={`text-lg ${highlight.focus} ${highlight.caret}`}
                                             name="notes"></textarea>
