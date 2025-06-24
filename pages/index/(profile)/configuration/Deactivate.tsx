@@ -3,6 +3,7 @@ import { navigate } from "vike/client/router";
 
 import CardHead from "../../../../components/CardHead";
 import FormGroup from "../../../../components/FormGroup";
+import FormError from "../../../../components/FormError";
 
 import { useDeactivateUserMutation } from "../../../../store/api/user";
 import { dispatchResult } from "../../../../utils/dispatchResult";
@@ -63,6 +64,10 @@ const Deactivate = ({ open, setOpen }: { open: number, setOpen: Function }) => {
                                 isLoading={result.isLoading}
                                 name="password" single type="password" label="Type your password to deactivate" button="DEACTIVATE"
                             />
+                        <FormError
+                        error={result.error}
+                        fields={["password"]}
+                        />
                         </div>
                     </form>
                 </div>

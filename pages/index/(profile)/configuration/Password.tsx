@@ -4,6 +4,7 @@ import { useForm } from "react-hook-form";
 import CardHead from "../../../../components/CardHead";
 import FormGroup from "../../../../components/FormGroup";
 import CardFooter from "../../../../components/CardFooter";
+import FormError from "../../../../components/FormError";
 
 import { useChangePasswordMutation, useVerifyPasswordMutation } from "../../../../store/api/user";
 import { dispatchResult } from "../../../../utils/dispatchResult";
@@ -64,6 +65,10 @@ const Password = ({ open, setOpen }: { open: number, setOpen: Function }) => {
                                     button="VERIFY"
                                 />
                             </div>
+                            <FormError
+                            error={result.error}
+                            fields={["password"]}
+                            />
                         </form>
                         <Verify verified={verified} setVerified={setVerified} />
                     </div>
@@ -115,6 +120,10 @@ const Verify = ({ verified, setVerified }: { verified: boolean, setVerified: Fun
                     errors={errors.password_check?.message}
                     name="password" type="text" label="Confirm new password"
                     disabled={!verified}
+                />
+                <FormError
+                error={result.error}
+                fields={["password", "password_check"]}
                 />
                 <CardFooter
                     isLoading={result.isLoading}

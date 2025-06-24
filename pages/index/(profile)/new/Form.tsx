@@ -4,11 +4,13 @@ import { navigate } from "vike/client/router";
 
 import FormGroup from "../../../../components/FormGroup";
 import CardFooter from "../../../../components/CardFooter";
+import FormError from "../../../../components/FormError";
 
 import { useAppDispatch, useAppSelector } from "../../../../store/hooks";
 import { useNewCollectionMutation } from "../../../../store/api/profile";
 import { close } from "../../../../store/slices/popup";
 import { dispatchResult } from "../../../../utils/dispatchResult";
+import { useMediaQuery } from "../../../../utils/mediaQuery";
 
 type FormValues = {
     name: string;
@@ -34,9 +36,10 @@ const resolver: Resolver<FormValues> = async (values) => {
 
 const NewForm = () => {
     const dispatch = useAppDispatch();
+    const isLG = useMediaQuery()
 
     const [uid, setUid] = useState<string>("")
-    
+
     const {
         register,
         handleSubmit,
@@ -50,12 +53,14 @@ const NewForm = () => {
             .then((data) => {
                 setUid(data.uid)
             })
-        }
-        
+    }
+
     useEffect(() => {
         if (result.isSuccess) {
             dispatch(close())
-            navigate(`/collections/${uid}`);
+            if (!isLG) {
+                navigate(`/collections/${uid}`);
+            }
         }
     }, [result.isSuccess])
 
@@ -90,6 +95,10 @@ const NewForm = () => {
                         errors={errors.about?.message}
                         type="textarea"
                         register={register("about")}
+                    />
+                    <FormError
+                        error={result.error}
+                        fields={["name", "private", "about"]}
                     />
                 </div>
                 <CardFooter

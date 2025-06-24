@@ -1,38 +1,27 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { navigate } from 'vike/client/router'
-import { useForm, Resolver } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import CardHead from "../../components/CardHead";
 import FormGroup from "../../components/FormGroup.js";
+import CardFooter from "../../components/CardFooter";
+import FormError from "../../components/FormError";
 
 import type { LogInInput } from "../../utils/types.js";
 
-import { useAppDispatch, useAppSelector } from "../../store/hooks.js";
+import { useAppDispatch } from "../../store/hooks.js";
 import { useLoginMutation } from "../../store/api/auth";
 import { refreshToken } from "../../store/slices/token";
 
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
+import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 
-type FormValues = {
-    username: string
-    password: string
-}
+const LoginSchema = z.object({
+    username: z.string(),
+    password: z.string().min(6, { message: "Password must be at least 6 characters long" })
+});
 
-
-const resolver: Resolver<FormValues> = async (values) => {
-    return {
-        values: values.username ? values : {},
-        errors: !values.username
-            ? {
-                username: {
-                    type: "required",
-                    message: "Username is required.",
-                },
-            }
-            : {},
-    }
-}
-
+type LoginSchemaType = z.infer<typeof LoginSchema>;
 
 
 const LogIn = () => {
@@ -42,13 +31,13 @@ const LogIn = () => {
         register,
         handleSubmit,
         formState: { errors },
-    } = useForm<FormValues>({ resolver })
+    } = useForm<LoginSchemaType>({ resolver: zodResolver(LoginSchema) })
 
     const [useLogin, result] = useLoginMutation();
 
+    const [fetchError, setFetchError] = useState<string | undefined>()
 
-
-    const performLogin = handleSubmit((data: FormValues) => {
+    const performLogin = handleSubmit((data: LoginSchemaType) => {
         useLogin(data as LogInInput)
             .unwrap()
             .then((res) => {
@@ -62,52 +51,43 @@ const LogIn = () => {
         }
     }, [result.isSuccess])
 
-
     return (
         <>
-        <div className="card w-full">
-            <CardHead
-                title="Login"
-            />
-            <div className="card-body">
-                <form onSubmit={performLogin}>
-                    <div className="content">
-                        <FormGroup
-                            name="username"
-                            label="Username"
-                            errors={errors.username?.message}
-                            type="text"
-                            register={register("username", {
-                                required: true
-                            })}
-                        />
-                        <FormGroup
-                            name="password"
-                            label="Password"
-                            errors={errors.password?.message}
-                            type="password"
-                            register={register("password", {
-                                required: true
-                            })}
-                        />
-                    </div>
-
-                        <div className="card-footer pb-5">
-                            <button
-                                type="submit"
-                                className={result.error ? "bg-error" : "bg-secondary"}
-                            >
-                                {result.isLoading ?
-                                    <ArrowPathIcon className="icon-spin" />
-                                    :
-                                    "GO!"
-                                }
-                            </button>
+            <div className="card w-full">
+                <CardHead
+                    title="Login"
+                />
+                <div className="card-body">
+                    <form onSubmit={performLogin}>
+                        <div className="content">
+                            <FormGroup
+                                name="username"
+                                label="Username"
+                                errors={errors.username?.message}
+                                type="text"
+                                register={register("username", { required: true })}
+                            />
+                            <FormGroup
+                                name="password"
+                                label="Password"
+                                errors={errors.password?.message}
+                                type="password"
+                                register={register("password", { required: true })}
+                            />
+                            <FormError
+                                error={result.error}
+                                fields={["username", "password"]}
+                            />
                         </div>
+                        <CardFooter
+                            error={result.error}
+                            isLoading={result.isLoading}
+                            button="Go!"
+                        />
 
-                </form>
-            </div>
-            </div>
+                    </form>
+                </div >
+            </div >
         </>
     )
 }

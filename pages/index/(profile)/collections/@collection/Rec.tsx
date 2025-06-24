@@ -86,6 +86,9 @@ const IndividualRec = ({ uid, title, author, link, fandom, rating, chapters, wor
                                             {...register("notes", { required: false })}
                                             className={`text-lg ${highlight.focus} ${highlight.caret}`}
                                             name="notes"></textarea>
+                                            <span className="form-error">
+                                                {errors.notes?.message}
+                                            </span>
 
                                     </>
                                     :

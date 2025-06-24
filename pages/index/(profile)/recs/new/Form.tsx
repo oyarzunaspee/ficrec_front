@@ -1,10 +1,11 @@
 import { useEffect, useState } from "react";
-import { useForm, Control, useWatch, Resolver } from "react-hook-form";
+import { useForm, Control, useWatch } from "react-hook-form";
 import { usePageContext } from "vike-react/usePageContext";
 import { navigate } from 'vike/client/router'
 
 import FormGroup from "../../../../../components/FormGroup";
 import CardFooter from "../../../../../components/CardFooter";
+import FormError from "../../../../../components/FormError";
 
 import { UserCollection } from "../../../../../utils/types";
 
@@ -18,27 +19,19 @@ import useColor from "../../../../../utils/colors";
 
 import { LockClosedIcon, LockOpenIcon, ChevronDownIcon } from "@heroicons/react/24/solid";
 import { QuestionMarkCircleIcon } from "@heroicons/react/24/outline";
+import { z } from "zod/v4";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-type FormValues = {
-    collection: string;
-    notes: string;
-    code: string;
-}
 
-const resolver: Resolver<FormValues> = async (values) => {
-    return {
-        values: values.code ? values : {},
-        errors: !values.code
-            ? {
-                code: {
-                    type: "required",
-                    message: "Fic code is required.",
-                },
-            }
-            : {},
-    }
-}
+const RecSchema = z.object({
+    collection: z.string(),
+    notes: z.string(),
+    code: z.string().regex(/^(?<url><a href=\"https:\/\/archiveofourown\.org\/works\/(?:\d+?)\">)<strong>(?<title>.{1,255}?)<\/strong><\/a>\s\((?<words>\d+?)\swords\)\s(?:by\s(?<author>Anonymous|(?:(?:,\s)?<a\shref=\"https:\/\/archiveofourown\.org\/users\/[^_|\d]\w{3,44}\"><strong>[^_|\d]\w{3,44}<\/strong><\/a>)+))?<br\s\/>Chapters:\s(?<chapters>(?:\d+?)\/(?:[?]|\d+?))<br\s\/>Fandom:\s(?<fandom>(?:(?:,\s)?<a.+?<\/a>)+)(?:<br\s\/>)?Rating:\s(?<rating>Explicit|Mature|General Audiences|Teen And Up Audiences|Not Rated)<br\s\/>Warnings:\s(?<warnings>[(,\s)?Graphic Depictions Of Violence|Major Character Death|Author Choose Not To Use Archive Warnings|No Archive Warnings Apply|Rape/Non\-Con|Underage Sex]+)(?:<br\s\/>)?(?:Relationships:\s(?<ship>.+?\/.+?)(?=[\w\s]+:|$))?(?:Characters:\s(?<characters>.+?)(?=[\w\s]+:|$))?(?:Additional\sTags:\s(?<tags>.+?)(?=[\w\s]+:|$))?(?:Series:\s.+?(?=[\w\s]+:|$))?(?:Summary:\s(?<summary>.+?<\/p>))?$/,
+        {message: "Invalid code"}
+    )
+});
 
+type RecSchemaType = z.infer<typeof RecSchema>;
 
 const Form = () => {
     const dispatch = useAppDispatch()
@@ -60,10 +53,12 @@ const Form = () => {
         setValue,
         control,
         formState: { errors },
-    } = useForm<FormValues>({ resolver })
+    } = useForm<RecSchemaType>({ resolver: zodResolver(RecSchema) })
+
+    console.log(errors)
 
     const [useAddRec, result] = useAddRecMutation();
-    const performAddRec = async (data: FormValues) => {
+    const performAddRec = async (data: RecSchemaType) => {
         setCollection(data.collection)
         await useAddRec({
             uid: data.collection,
@@ -118,18 +113,22 @@ const Form = () => {
                         <label htmlFor="code" className="flex">
                             Code
                             <a href="/example" target="_blank">
-                            <QuestionMarkCircleIcon className="size-5 ml-1 cursor-pointer" />
+                                <QuestionMarkCircleIcon className="size-5 ml-1 cursor-pointer" />
                             </a>
-                            <span>
-                                {errors.code?.message}
-                            </span>
                         </label>
                         <textarea
                             className={`${highlight.caret} ${highlight.focus}`}
                             {...register("code")}
                             name="code"
                         ></textarea>
+                        <span className="form-error">
+                                {errors.code?.message}
+                            </span>
                     </div>
+                    <FormError
+                        error={result.error}
+                        fields={["notes", "code"]}
+                    />
                 </div>
                 <CardFooter
                     isLoading={result.isLoading}
@@ -140,7 +139,7 @@ const Form = () => {
 }
 
 type CollectionRenderProps = {
-    control: Control<FormValues>;
+    control: Control<RecSchemaType>;
     collectionValue?: string;
     collectionList: UserCollection[];
     setValue: Function;

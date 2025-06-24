@@ -1,13 +1,14 @@
 import { useEffect } from "react";
 import { usePageContext } from "vike-react/usePageContext";
 import { navigate } from "vike/client/router";
+import { useForm } from "react-hook-form";
 
 import FormGroup from "../../../../../../components/FormGroup";
 import CardFooter from "../../../../../../components/CardFooter";
+import FormError from "../../../../../../components/FormError";
 
 import type { Collection } from "../../../../../../utils/types";
 
-import { useForm, Resolver, useWatch, Control } from "react-hook-form";
 import { useEditCollectionMutation } from "../../../../../../store/api/profile";
 import { dispatchResult } from "../../../../../../utils/dispatchResult";
 import { useMediaQuery } from "../../../../../../utils/mediaQuery";
@@ -87,6 +88,10 @@ const Form = ({ name, uid, privacy, about, setOpen }: FormProps) => {
                         errors={errors.about?.message}
                         type="textarea"
                         register={register("about")}
+                    />
+                    <FormError
+                    error={result.error}
+                    fields={["name", "private", "about"]}
                     />
                 </div>
                 <CardFooter

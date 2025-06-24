@@ -1,47 +1,40 @@
-import { useForm, Resolver } from "react-hook-form";
+import { useEffect } from "react";
+import { useForm } from "react-hook-form";
 
 import CardFooter from "../../components/CardFooter";
 import CardHead from "../../components/CardHead";
 import FormGroup from "../../components/FormGroup";
+import FormError from "../../components/FormError";
 
 
 import { useSignUpMutation } from "../../store/api/auth";
 
-import { ArrowPathIcon } from "@heroicons/react/24/solid";
-import { useEffect } from "react";
+import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
 
-type FormValues = {
-    username: string;
-    password: string;
-    password_check: string;
-}
+const SignupSchema = z.object({
+    username: z.string(),
+    password: z.string().min(6, { message: "Password must be at least 6 characters long" }),
+    password_check: z.string().min(6, { message: "Password must be at least 6 characters long" })
+});
 
-const resolver: Resolver<FormValues> = async (values) => {
-    return {
-        values: values.username ? values : {},
-        errors: !values.username
-            ? {
-                username: {
-                    type: "required",
-                    message: "Username is required.",
-                },
-            }
-            : {},
-    }
-}
+type SignupSchemaType = z.infer<typeof SignupSchema>;
 
-const SignUp = ({setLogInCard}: {setLogInCard: Function}) => {
+
+const SignUp = ({ setLogInCard }: { setLogInCard: Function }) => {
     const {
-            register,
-            handleSubmit,
-            reset,
-            formState: { errors },
-        } = useForm<FormValues>({ resolver })
+        register,
+        handleSubmit,
+        reset,
+        formState: { errors },
+    } = useForm<SignupSchemaType>({ resolver: zodResolver(SignupSchema) })
 
     const [useSignup, result] = useSignUpMutation()
-    
-    const performSignup = handleSubmit((data: FormValues) => {
-    
+
+    console.log(result.error)
+
+    const performSignup = handleSubmit((data: SignupSchemaType) => {
+
         useSignup(data)
             .unwrap()
             .then(() => {
@@ -51,19 +44,16 @@ const SignUp = ({setLogInCard}: {setLogInCard: Function}) => {
                     password_check: ""
                 })
             })
-            .catch((e) => {
-                console.log(e)
-            })
-        })
+    })
 
-        useEffect(() => {
-            if (result.isSuccess) {
-                setLogInCard(true)
-            }
-        }, [result.isSuccess])
+    useEffect(() => {
+        if (result.isSuccess) {
+            setLogInCard(true)
+        }
+    }, [result.isSuccess])
 
-        return (
-            <>
+    return (
+        <>
             <div className="card w-full">
                 <CardHead
                     title="Create account"
@@ -76,22 +66,14 @@ const SignUp = ({setLogInCard}: {setLogInCard: Function}) => {
                                 label="Username"
                                 errors={errors.username?.message}
                                 type="text"
-                                register={register("username", {
-                                    required: true,
-                                    minLength: { value: 4, message: "Username should be at least 4 characters long" },
-                                    // validate: validateUsername
-                                })}
+                                register={register("username", { required: true })}
                             />
                             <FormGroup
                                 name="password"
                                 label="Password"
                                 errors={errors.password?.message}
                                 type="password"
-                                register={register("password", {
-                                    required: true,
-                                    minLength: { value: 6, message: "Password should be at least 6 characters long" },
-    
-                                })}
+                                register={register("password", { required: true })}
                             />
                             <FormGroup
                                 name="password_check"
@@ -100,24 +82,21 @@ const SignUp = ({setLogInCard}: {setLogInCard: Function}) => {
                                 type="password"
                                 register={register("password_check", { required: true })}
                             />
+                            <FormError
+                            error={result.error}
+                            fields={["username", "password"]}
+                            />
                         </div>
-                        <div className="card-footer pb-5">
-                            <button
-                                type="submit"
-                                className={result.error ? "bg-error" : "bg-secondary"}
-                            >
-                                {result.isLoading ?
-                                    <ArrowPathIcon className="icon-spin" />
-                                    :
-                                    "GO!"
-                                }
-                            </button>
-                        </div>
+                        <CardFooter
+                        error={result.error}
+                        isLoading={result.isLoading}
+                        button="Go!"
+                        />
                     </form>
                 </div>
-                </div>
-            </>
-        )
+            </div>
+        </>
+    )
 }
 
 export default SignUp;

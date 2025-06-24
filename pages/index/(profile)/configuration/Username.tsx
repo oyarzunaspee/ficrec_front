@@ -2,6 +2,7 @@ import { useForm } from "react-hook-form";
 
 import CardHead from "../../../../components/CardHead";
 import FormGroup from "../../../../components/FormGroup";
+import FormError from "../../../../components/FormError";
 
 import { useChangeUsernameMutation } from "../../../../store/api/profile";
 import { dispatchResult } from "../../../../utils/dispatchResult";
@@ -66,6 +67,10 @@ const Username = ({ open, setOpen, username }: { open: number, setOpen: Function
                                 errors={errors.username?.message}
                                 isLoading={result.isLoading}
                                 name="username" single label="New username"
+                            />
+                            <FormError
+                            error={result.error}
+                            fields={["username"]}
                             />
                         </div>
                     </form>
