@@ -3,6 +3,7 @@ import { useForm, useWatch, Control } from "react-hook-form";
 import CardHead from "../../../../components/CardHead";
 import CardFooter from "../../../../components/CardFooter";
 import FormGroup from "../../../../components/FormGroup.js";
+import FormError from "../../../../components/FormError";
 
 import { useAppDispatch } from "../../../../store/hooks";
 import { updateHighlight } from "../../../../store/slices/highlight";
@@ -113,6 +114,10 @@ const Bio = ({ open, setOpen, highlight, avatar, bio }: BioProps) => {
                                 register={register("bio")}
                                 errors={errors.bio?.message}
                                 name="bio" type="textarea" label="Bio"
+                            />
+                            <FormError
+                            error={result.error}
+                            fields={["highlight", "avatar", "bio"]}
                             />
                         </div>
                         <CardFooter

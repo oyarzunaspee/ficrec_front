@@ -94,16 +94,16 @@
     }
   }
 
+  & .form-error {
+    @apply block text-xs mt-1;
+    color: var(--color-error);
+  }
+
   .form-group {
     @apply mb-3;
 
     & label {
       @apply font-medium mb-2 text-sm block;
-    }
-
-    & span {
-      @apply ml-2;
-      color: var(--color-error);
     }
 
     & .single {

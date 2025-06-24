@@ -49,9 +49,6 @@ export function FormGroup({ disabled, name, label, errors, type, single, registe
                         className={disabled ? "text-base" : ""}
                         htmlFor={name}>
                         {label}
-                        <span>
-                            {errors}
-                        </span>
                     </label>
                     {single ?
                         <div className="single">
@@ -94,6 +91,9 @@ export function FormGroup({ disabled, name, label, errors, type, single, registe
                                     className={`${highlight.focus} ${highlight.caret}`}
                                     />
                             }
+                             <span className="form-error">
+                            {errors}
+                        </span>
                         </>
                     }
                 </>
