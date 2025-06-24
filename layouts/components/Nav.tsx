@@ -28,10 +28,8 @@ const Nav = () => {
 
   return (
     <>
-      <div className={`overflow-hidden transition-height duration-300 ease-in-out
-    ${isLG ? "max-h-50" : (navOpen ? "max-h-50" : "max-h-0")}
-    `}>
-        <div className="px-5 pb-1 pt-5 flex justify-around items-center">
+      
+        <div className={`px-5 ${(navOpen && !isLG) || isLG ? "pt-3 pb-1" : ""} ${!navOpen && !isLG ? "py-3" : ""}  flex justify-around items-center bg-white`}>
           <div 
           onClick={performLogOut}
           className="cursor-pointer px-2">
@@ -60,7 +58,7 @@ const Nav = () => {
           </a>
 
         </div>
-      </div>
+      
     </>
   )
 }

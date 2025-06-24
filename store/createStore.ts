@@ -17,6 +17,8 @@ import { collectionDisplaySlice } from "./slices/collectionDisplay";
 import { querySlice } from "./slices/query";
 import { resultMessageSlice } from "./slices/resultMessage";
 
+import navMiddleware from "./middlewares";
+
 const reducer = combineReducers({
   [authApi.reducerPath]: authApi.reducer,
   [profileApi.reducerPath]: profileApi.reducer,
@@ -46,6 +48,6 @@ const createStore = (pageContext: PageContext) => {
         thunk: {
           extraArgument: { pageContext }
         },
-      }).concat(authApi.middleware, profileApi.middleware, userApi.middleware, publicApi.middleware)
+      }).concat(navMiddleware, authApi.middleware, profileApi.middleware, userApi.middleware, publicApi.middleware)
   })
 }
