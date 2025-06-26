@@ -10,7 +10,7 @@ export default defineConfig({
     port: 3000,
     proxy: {
       '/api': {
-        target: 'https://almondluu.pythonanywhere.com/v1/',
+        target: 'https://ficrec-api.vercel.app/v1/',
         changeOrigin: true,
         rewrite: (path: string) => path.replace(/^\/api/, ''),
       }

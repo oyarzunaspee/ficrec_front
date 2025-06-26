@@ -14,7 +14,7 @@ export const data = async (pageContext: PageContextServer) => {
     const username = param[1]
     const uid = param[2]
   
-    const response = await fetch(`https://almondluu.pythonanywhere.com/v1/public/user/${username}/collections/${uid}`);
+    const response = await fetch(`https://ficrec-api.vercel.app/v1/public/user/${username}/collections/${uid}`);
     let collection = (await response.json()) as PublicCollection;
   
     config({
