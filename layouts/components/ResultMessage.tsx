@@ -39,7 +39,7 @@ const ResultMessage = () => {
     return (
         <>
             <div className={`fixed lg:bottom-17 lg:w-fit
-            bottom-10 w-full top-auto right-auto
+            bottom-17 w-full top-auto right-auto
             transition-opacity duration-300 ease-in-out
             ${result.visible ? "h-fit opacity-100 z-30" : "h-0 opacity-0 z-0"}
             `}>

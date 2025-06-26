@@ -27,7 +27,11 @@ export type User = {
   avatar: string | undefined;
   bio: string | undefined;
   highlight: string;
-  collections: Array<UserCollection>;
+  collections: UserCollection[];
+}
+
+export type PublicUserCollection = UserCollection & {
+    about: string;
 }
 
 export type PublicUser = {
@@ -35,10 +39,12 @@ export type PublicUser = {
     avatar: string | undefined;
     bio: string | undefined;
     highlight: string;
+    collections: PublicUserCollection[];
 }
 
 export type Collection = {
     uid: string;
+    username?: string;
     name: string;
     about: string | undefined;
     private: boolean;
@@ -67,14 +73,14 @@ export type Rec = {
     uid: string;
     title: string;
     words: number;
-    author: Array<string>;
+    author: string[];
     chapters: string;
-    fandom: Array<string>;
+    fandom: string[];
     rating: string;
-    warnings: Array<string>;
-    ship: Array<string>;
-    characters: Array<string>;
-    tags: Array<string>;
+    warnings: string[];
+    ship: string[];
+    characters: string[];
+    tags: string[];
     summary: string | undefined;
     notes: string | undefined;
     link: string;

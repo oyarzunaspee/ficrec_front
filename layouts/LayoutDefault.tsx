@@ -8,6 +8,7 @@ import NewButton from "./components/NewButton";
 import ScrollButton from "./components/ScrollButton";
 import Tabs from "./components/Tabs";
 import ResultMessage from "./components/ResultMessage";
+import Transition from "../pages/index/(public)/components/Transition";
 
 import "./style.css";
 
@@ -89,16 +90,16 @@ const LayoutDefault = ({ children }: { children: React.ReactNode }) => {
                   </div>
                 }
               </div>
-              <div className="fixed bottom-15 right-3 lg:right-10">
+              <div className={`fixed right-5 lg:right-10 lg:bottom-20 ${navOpen && !isLG ? "bottom-10" : ""} ${!navOpen && !isLG ? "bottom-20" : ""}`}>
                 <NewButton />
-                <ScrollButton />
+                <ScrollButton userHighlight={data.highlight} />
               </div>
               <ResultMessage />
             </div>
           </div>
 
         </div>
-        <div className="absolute bottom-0 w-full">
+        <div className="fixed bottom-0 w-full">
           <div className={`overflow-hidden transition-height duration-300 ease-in-out
           ${!navOpen && !isLG ? "max-h-50" : "max-h-0"}
           `}>

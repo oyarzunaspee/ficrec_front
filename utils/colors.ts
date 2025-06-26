@@ -11,7 +11,8 @@ const Colors = {
         accent: "accent-color-highlight-rose",
         caret: "caret-highlight-rose",
         focus: "focus:ring-highlight-rose focus:ring-2",
-        pale: "bg-highlight-rose-pale"
+        pale: "bg-highlight-rose-pale",
+        contrast: "text-white"
     },
     pink: {
         text: "text-highlight-pink",
@@ -23,7 +24,8 @@ const Colors = {
         accent: "accent-color-highlight-pink",
         caret: "caret-highlight-pink",
         focus: "focus:ring-highlight-pink focus:ring-2",
-        pale: "bg-highlight-pink-pale"
+        pale: "bg-highlight-pink-pale",
+        contrast: "text-grave"
     },
     yellow: {
         text: "text-highlight-yellow",
@@ -35,7 +37,8 @@ const Colors = {
         accent: "accent-color-highlight-yellow",
         caret: "caret-highlight-yellow",
         focus: "focus:ring-highlight-yellow focus:ring-2",
-        pale: "bg-highlight-yellow-pale"
+        pale: "bg-highlight-yellow-pale",
+        contrast: "text-grave"
     },
     orange: {
         text: "text-highlight-orange",
@@ -47,7 +50,8 @@ const Colors = {
         accent: "accent-color-highlight-orange",
         caret: "caret-highlight-orange",
         focus: "focus:ring-highlight-orange focus:ring-2",
-        pale: "bg-highlight-orange-pale"
+        pale: "bg-highlight-orange-pale",
+        contrast: "text-grave"
     },
     green: {
         text: "text-highlight-green",
@@ -59,7 +63,8 @@ const Colors = {
         accent: "accent-color-highlight-green",
         caret: "caret-highlight-green",
         focus: "focus:ring-highlight-green focus:ring-2",
-        pale: "bg-highlight-green-pale"
+        pale: "bg-highlight-green-pale",
+        contrast: "text-white"
     },
     indigo: {
         text: "text-highlight-indigo",
@@ -71,7 +76,8 @@ const Colors = {
         accent: "accent-color-highlight-indigo",
         caret: "caret-highlight-indigo",
         focus: "focus:ring-highlight-indigo focus:ring-2",
-        pale: "bg-highlight-indigo-pale"
+        pale: "bg-highlight-indigo-pale",
+        contrast: "text-white"
     },
     violet: {
         text: "text-highlight-violet",
@@ -83,7 +89,8 @@ const Colors = {
         accent: "accent-color-highlight-violet",
         caret: "caret-highlight-violet",
         focus: "focus:ring-highlight-violet focus:ring-2",
-        pale: "bg-highlight-violet-pale"
+        pale: "bg-highlight-violet-pale",
+        contrast: "text-white"
     },
     slate: {
         text: "text-highlight-slate",
@@ -95,7 +102,8 @@ const Colors = {
         accent: "accent-color-highlight-slate",
         caret: "caret-highlight-slate",
         focus: "focus:ring-highlight-slate focus:ring-2",
-        pale: "bg-highlight-slate-pale"
+        pale: "bg-highlight-slate-pale",
+        contrast: "text-white"
     },
     default: {
         text: "text-grave",
@@ -107,7 +115,8 @@ const Colors = {
         accent: "accent-color-grave",
         caret: "caret-grave",
         focus: "focus:ring-grave focus:ring-2",
-        pale: "bg-hover"
+        pale: "bg-hover",
+        contrast: "text-white"
     }
 }
 

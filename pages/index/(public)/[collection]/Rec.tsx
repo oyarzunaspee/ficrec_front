@@ -44,7 +44,7 @@ const IndividualRec = ({ rec, userHighlight, show, collection, username, userBoo
     }
     return (
         <>
-            <div key={rec.uid} className="card pb-7 pt-3 mb-5 relative">
+            <div key={rec.uid} className="card pb-7 pt-3 not-last:mb-10">
                 <Bookmarks
                     userHighlight={userHighlight}
                     username={username}
@@ -52,7 +52,7 @@ const IndividualRec = ({ rec, userHighlight, show, collection, username, userBoo
                     rec={rec.uid}
                     userBookmarks={userBookmarks}
                 />
-                <div className="card-head
+                <div className="card-head pt-0
                         lg:px-10 md:px-5
                             ">
                     <div className="title ">

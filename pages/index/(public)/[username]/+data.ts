@@ -1,7 +1,7 @@
 import { useConfig } from "vike-react/useConfig";
 
 import type { PageContextServer } from "vike/types";
-import type { User } from "../../../../utils/types";
+import type { PublicUser } from "../../../../utils/types";
 
 export type Data = Awaited<ReturnType<typeof data>>;
 
@@ -12,7 +12,7 @@ export const data = async (pageContext: PageContextServer) => {
   const username = pageContext.urlPathname.slice(2)
 
   const response = await fetch(`https://almondluu.pythonanywhere.com/v1/public/user/${username}`);
-  let user = (await response.json()) as User;
+  let user = (await response.json()) as PublicUser;
 
   config({
     title: user.username,
@@ -23,8 +23,8 @@ export const data = async (pageContext: PageContextServer) => {
   return user;
 };
 
-function minimize(user: User): User {
-  const { uid, username, avatar, bio, highlight, collections } = user;
-  const minimizedUser = { uid, username, avatar, bio, highlight, collections };
+function minimize(user: PublicUser): PublicUser {
+  const { username, avatar, bio, highlight, collections } = user;
+  const minimizedUser = { username, avatar, bio, highlight, collections };
   return minimizedUser;
 }

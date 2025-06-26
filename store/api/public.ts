@@ -32,7 +32,7 @@ export const publicApi = createApi({
         ) => lastPageParam + 1
       },
       query({ queryArg, pageParam }) {
-        return `/user/${queryArg.username}/collections/${queryArg.uid}/recs?${queryArg.query ? `query=${queryArg.query}&` : ""}page=${pageParam || 1}`
+        return `/user/${queryArg.username}/collections/${queryArg.uid}/recs/?${queryArg.query ? `query=${queryArg.query}&` : ""}page=${pageParam || 1}`
       }
     }),
     getFindRecs: builder.infiniteQuery<FindRecsResultOutput, { query: string, type: string, tags?: string }, number>({

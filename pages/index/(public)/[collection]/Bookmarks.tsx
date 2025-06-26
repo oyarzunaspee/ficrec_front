@@ -61,7 +61,7 @@ const Bookmarks = ({ username, collection, rec, userHighlight, userBookmarks }: 
                         <BookmarkIcon
                             title="Add to bookmarks"
                             onClick={!isLG ? () => { } : performAddSaved}
-                            className={`size-5
+                            className={`size-6 lg:size-8
                         ${isLG ? "cursor-pointer" : ""}
                         ${(userBookmarks && userBookmarks.bookmarks.includes(rec)) ?
                                     highlight.text

@@ -24,6 +24,7 @@ const About = () => {
     const { routeParams } = usePageContext();
     const highlight = useColor()
 
+
     const { data, error, isLoading } = useGetCollectionQuery(routeParams.collection);
 
     useEffect(() => {
@@ -80,6 +81,7 @@ const About = () => {
                             setDropdown={setDropdown}
                             setEditCollection={setEditCollection}
                             setDeleteCollection={setDeleteCollection}
+                            username={data.username}
                         />
                     </div>
                 </div>
@@ -141,9 +143,10 @@ type MenuProps = {
     setDropdown: Function;
     setEditCollection: Function;
     setDeleteCollection: Function;
+    username?: string;
 }
 
-const Menu = ({ dropdown, collection, setDropdown, setEditCollection, setDeleteCollection }: MenuProps) => {
+const Menu = ({ dropdown, collection, setDropdown, setEditCollection, setDeleteCollection, username }: MenuProps) => {
     const { routeParams } = usePageContext();
 
     const [copied, setCopied] = useState<boolean>(false);
@@ -151,7 +154,8 @@ const Menu = ({ dropdown, collection, setDropdown, setEditCollection, setDeleteC
     dispatchResult({
         type: "Link",
         action: "copied",
-        success: copied
+        success: copied,
+        extra: setCopied
     })
 
 
@@ -166,7 +170,8 @@ const Menu = ({ dropdown, collection, setDropdown, setEditCollection, setDeleteC
             title: "Copy link",
             Icon: ClipboardDocumentIcon,
             click: async () => {
-                const copiedResult = await copyContent(collection);
+                const copy = `https://ficrec.vercel.app/@${username}/${collection}`
+                const copiedResult = await copyContent(copy);
                 setCopied(copiedResult);
                 setDropdown(false);
             }

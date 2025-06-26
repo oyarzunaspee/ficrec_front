@@ -4,8 +4,8 @@ import useColor from "../../utils/colors";
 
 import { ArrowUpCircleIcon } from "@heroicons/react/24/solid";
 
-const ScrollButton = ({highlight} : {highlight?: string}) => {
-    const userHighlight = useColor()
+const ScrollButton = ({userHighlight} : {userHighlight?: string}) => {
+    const highlight = useColor()
 
     const [scroll, setScroll] = useState<boolean>(false);
 
@@ -32,9 +32,9 @@ const ScrollButton = ({highlight} : {highlight?: string}) => {
             <div className={`overflow-hidden transition-height ease-in-out duration-500
                         ${scroll ? "h-20" : "h-0"}
                         `}>
-                <button onClick={() => scrollToTop()} className="cursor-pointer">
-                    <ArrowUpCircleIcon className={`size-12 rounded-full text-white
-                    ${highlight ? highlight : userHighlight.bg}
+                <button onClick={() => scrollToTop()} className="cursor-pointer z-60">
+                    <ArrowUpCircleIcon className={`size-12 rounded-full text-white z-60
+                    ${userHighlight == "default" ? "bg-grave" : highlight.bg}
                     `} />
                 </button>
             </div>

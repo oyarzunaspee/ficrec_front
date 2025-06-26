@@ -12,9 +12,12 @@ const activeUserSlice = createSlice({
   reducers: {
     active(state) {
       state.value = true
+    },
+    deactive(state) {
+      state.value = false
     }
   }
 })
 
-export const { active } = activeUserSlice.actions
+export const { active, deactive } = activeUserSlice.actions
 export default activeUserSlice.reducer
