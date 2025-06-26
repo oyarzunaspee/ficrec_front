@@ -31,8 +31,6 @@ const SignUp = ({ setLogInCard }: { setLogInCard: Function }) => {
 
     const [useSignup, result] = useSignUpMutation()
 
-    console.log(result.error)
-
     const performSignup = handleSubmit((data: SignupSchemaType) => {
 
         useSignup(data)

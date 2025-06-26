@@ -10,7 +10,6 @@ import { active } from "../../../../store/slices/activeUser";
 const PublicNav = ({isSuccess, isError} : {isSuccess: boolean, isError: boolean}) => {
     const dispatch = useAppDispatch()
     const { urlParsed } = usePageContext()
-    console.log(usePageContext())
 
     const activeUser = useAppSelector((state) => state.activeUser.value)
 

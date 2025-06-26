@@ -55,8 +55,6 @@ const Form = () => {
         formState: { errors },
     } = useForm<RecSchemaType>({ resolver: zodResolver(RecSchema) })
 
-    console.log(errors)
-
     const [useAddRec, result] = useAddRecMutation();
     const performAddRec = async (data: RecSchemaType) => {
         setCollection(data.collection)

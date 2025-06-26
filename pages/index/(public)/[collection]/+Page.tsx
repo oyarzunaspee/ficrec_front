@@ -35,14 +35,8 @@ const Page = () => {
 
     const highlight = useColor(collection ? collection.reader.highlight : "default")
 
-
-
     const { data, isError, isSuccess } = useGetBookmarksQuery()
-
-    console.log(data)
-
-    
-
+ 
 
     if (!collection) return null;
 
