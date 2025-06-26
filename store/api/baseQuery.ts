@@ -25,7 +25,6 @@ export const baseQueryWithReauth: BaseQueryFn<
     const refreshResult = await baseQuery("/auth/refresh/", api, extraOptions)
 
     if (refreshResult.data && typeof refreshResult.data === "object" && "token" in refreshResult.data) {
-      console.log(refreshResult)
 
       api.dispatch(refreshToken(refreshResult.data.token as string));
       result = await baseQuery(args, api, extraOptions);
