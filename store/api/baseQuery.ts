@@ -5,7 +5,7 @@ import { refreshToken } from "../slices/token";
 
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://ficrec-api.vercel.app/v1/",
+  baseUrl: "https://api.ficrec.top/v1/",
   credentials: "include",
   prepareHeaders: (headers, { getState }) => {
     const token = (getState() as RootState).token.value;

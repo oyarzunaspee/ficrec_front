@@ -4,7 +4,7 @@ import { SignUpInput, LogInInput, Token } from "../../utils/types";
 export const authApi = createApi({
   reducerPath: "authApi",
   baseQuery: fetchBaseQuery({
-    baseUrl: "https://ficrec-api.vercel.app/v1/auth/",
+    baseUrl: "https://api.ficrec.top/v1/auth/",
     credentials: "include",
   }),
   endpoints: (builder) => ({

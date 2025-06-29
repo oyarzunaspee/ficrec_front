@@ -170,7 +170,7 @@ const Menu = ({ dropdown, collection, setDropdown, setEditCollection, setDeleteC
             title: "Copy link",
             Icon: ClipboardDocumentIcon,
             click: async () => {
-                const copy = `https://ficrec.vercel.app/@${username}/${collection}`
+                const copy = `https://ficrec.top/@${username}/${collection}`
                 const copiedResult = await copyContent(copy);
                 setCopied(copiedResult);
                 setDropdown(false);

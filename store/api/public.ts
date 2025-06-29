@@ -18,7 +18,7 @@ type FindRecsResultOutput = {
 
 export const publicApi = createApi({
   reducerPath: "publicApi",
-  baseQuery: fetchBaseQuery({ baseUrl: "https://ficrec-api.vercel.app/v1/public/" }),
+  baseQuery: fetchBaseQuery({ baseUrl: "https://api.ficrec.top/v1/public/" }),
   endpoints: (builder) => ({
     getRecs: builder.infiniteQuery<RecResultOutput, { username: string, uid: string, query: string }, number>({
       infiniteQueryOptions: {
